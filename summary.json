@@ -1,0 +1,19 @@
+{
+  "archive_parts": 3,
+  "target_account": "the_girl_ho_se",
+  "target_media_files": 100,
+  "groups": 72,
+  "category_groups": {
+    "Rings": 1,
+    "Bracelets": 3,
+    "Accessories": 1,
+    "Necklaces": 22,
+    "Review-Excluded": 8,
+    "Earrings": 2,
+    "Jewellery-Sets": 29,
+    "Chains": 5,
+    "Pendants": 1
+  },
+  "images": 78,
+  "videos": 22
+}

@@ -2,35 +2,53 @@ import mongoose from "mongoose";
 
 const taxSettingsSchema = new mongoose.Schema(
   {
-    taxEnabled: {
+    enabled: {
       type: Boolean,
       default: true,
     },
 
-    taxType: {
+    gstEnabled: {
+      type: Boolean,
+      default: true,
+    },
+
+    gstRate: {
+      type: Number,
+      default: 18,
+      min: 0,
+      max: 100,
+    },
+
+    cgstRate: {
+      type: Number,
+      default: 9,
+      min: 0,
+      max: 100,
+    },
+
+    sgstRate: {
+      type: Number,
+      default: 9,
+      min: 0,
+      max: 100,
+    },
+
+    igstRate: {
+      type: Number,
+      default: 18,
+      min: 0,
+      max: 100,
+    },
+
+    inclusive: {
+      type: Boolean,
+      default: false,
+    },
+
+    taxName: {
       type: String,
-      enum: ["inclusive", "exclusive"],
-      default: "inclusive",
-    },
-
-    gstPercentage: {
-      type: Number,
-      default: 18,
-    },
-
-    cgst: {
-      type: Number,
-      default: 9,
-    },
-
-    sgst: {
-      type: Number,
-      default: 9,
-    },
-
-    igst: {
-      type: Number,
-      default: 18,
+      default: "GST",
+      trim: true,
     },
   },
   {

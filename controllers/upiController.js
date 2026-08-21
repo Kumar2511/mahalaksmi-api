@@ -2,12 +2,9 @@ import UPISettings from "../models/UPISettings.js";
 
 // ======================================
 // Get UPI Settings
-// Public - Customer Payment Page
 // ======================================
-export const getUPISettings = async (
-  req,
-  res
-) => {
+
+export const getUPISettings = async (req, res) => {
   try {
     let settings =
       await UPISettings.findOne();
@@ -17,7 +14,7 @@ export const getUPISettings = async (
         await UPISettings.create({});
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       settings,
     });
@@ -27,7 +24,7 @@ export const getUPISettings = async (
       error
     );
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: error.message,
     });
@@ -36,59 +33,37 @@ export const getUPISettings = async (
 
 // ======================================
 // Update UPI Settings
-// Admin Only
 // ======================================
+
 export const updateUPISettings = async (
   req,
   res
 ) => {
   try {
-    const {
-      upiId,
-      accountName,
-      qrCode,
-      paymentInstructions,
-      enabled,
-    } = req.body;
-
     let settings =
       await UPISettings.findOne();
 
     if (!settings) {
       settings =
-        await UPISettings.create({
-          upiId,
-          accountName,
-          qrCode,
-          paymentInstructions,
-          enabled,
-        });
+        await UPISettings.create(
+          req.body
+        );
     } else {
-      settings.upiId =
-        upiId ?? settings.upiId;
-
-      settings.accountName =
-        accountName ??
-        settings.accountName;
-
-      settings.qrCode =
-        qrCode ?? settings.qrCode;
-
-      settings.paymentInstructions =
-        paymentInstructions ??
-        settings.paymentInstructions;
-
-      if (typeof enabled === "boolean") {
-        settings.enabled = enabled;
-      }
-
-      await settings.save();
+      settings =
+        await UPISettings.findByIdAndUpdate(
+          settings._id,
+          req.body,
+          {
+            new: true,
+            runValidators: true,
+          }
+        );
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message:
-        "UPI settings updated successfully.",
+        "UPI settings updated successfully",
       settings,
     });
   } catch (error) {
@@ -97,7 +72,7 @@ export const updateUPISettings = async (
       error
     );
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: error.message,
     });

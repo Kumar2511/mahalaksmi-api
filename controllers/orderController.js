@@ -779,6 +779,138 @@ export const cancelMyOrder = async (
 };
 
 // ======================================
+// Admin - Cancel Order
+// ======================================
+
+export const adminCancelOrder = async (
+  req,
+  res
+) => {
+  try {
+    const order = await Order.findById(
+      req.params.id
+    );
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Order not found.",
+      });
+    }
+
+    // ======================================
+    // Already Cancelled
+    // ======================================
+
+    if (
+      order.orderStatus === "Cancelled"
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Order is already cancelled.",
+      });
+    }
+
+    // ======================================
+    // Cancellable Status
+    // ======================================
+
+    const cancellableStatuses = [
+      "Pending",
+      "Confirmed",
+    ];
+
+    if (
+      !cancellableStatuses.includes(
+        order.orderStatus
+      )
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "This order can no longer be cancelled.",
+      });
+    }
+
+    // ======================================
+    // Cancellation Reason
+    // ======================================
+
+    const reason =
+      typeof req.body?.reason === "string"
+        ? req.body.reason.trim()
+        : "";
+
+    if (!reason) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Cancellation reason is required.",
+      });
+    }
+
+    // ======================================
+    // Restore Product Stock
+    // ======================================
+
+    for (
+      const item of order.products
+    ) {
+      await Product.findByIdAndUpdate(
+        item.productId,
+        {
+          $inc: {
+            stock: item.quantity,
+          },
+        }
+      );
+    }
+
+    // ======================================
+    // Cancel Order
+    // ======================================
+
+    order.orderStatus =
+      "Cancelled";
+
+    // Save admin cancellation reason
+    order.cancellationFeedback = {
+      submitted: true,
+      reason,
+      comment:
+        "Cancelled by admin.",
+      submittedAt: new Date(),
+    };
+
+    await order.save();
+
+    return res.status(200).json({
+      success: true,
+      message:
+        "Order cancelled successfully.",
+      order,
+    });
+  } catch (error) {
+    console.error(
+      "Admin cancel order error:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+      message:
+        "Unable to cancel order.",
+      error:
+        process.env.NODE_ENV ===
+        "development"
+          ? error.message
+          : undefined,
+    });
+  }
+};
+
+// ======================================
 // Customer - Submit Cancellation Feedback
 // ======================================
 

@@ -2,45 +2,30 @@ import mongoose from "mongoose";
 
 const reviewSchema = new mongoose.Schema(
   {
-    // ===============================
-    // Customer
-    // ===============================
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      required: false,
     },
 
-    // ===============================
-    // Order
-    // ===============================
     order: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Order",
-      required: true,
+      required: false,
     },
 
-    // ===============================
-    // Product
-    // ===============================
     product: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Product",
       required: true,
     },
 
-    // ===============================
-    // Customer Name
-    // ===============================
     customerName: {
       type: String,
       required: true,
       trim: true,
     },
 
-    // ===============================
-    // Rating
-    // ===============================
     rating: {
       type: Number,
       required: true,
@@ -48,18 +33,36 @@ const reviewSchema = new mongoose.Schema(
       max: 5,
     },
 
-    // ===============================
-    // Review
-    // ===============================
+    reviewTitle: {
+      type: String,
+      default: "",
+      trim: true,
+      maxlength: 150,
+    },
+
     comment: {
       type: String,
       required: true,
       trim: true,
+      maxlength: 2000,
     },
 
-    // ===============================
-    // Admin Approval
-    // ===============================
+    images: {
+      type: [String],
+      default: [],
+    },
+
+    videos: {
+      type: [String],
+      default: [],
+    },
+
+    source: {
+      type: String,
+      default: "website",
+      trim: true,
+    },
+
     approved: {
       type: Boolean,
       default: false,
@@ -70,7 +73,4 @@ const reviewSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model(
-  "Review",
-  reviewSchema
-);
+export default mongoose.model("Review", reviewSchema);

@@ -8,7 +8,6 @@ export const subscribeEmail = async (req, res) => {
   try {
     const { email } = req.body;
 
-    // Validate email
     if (!email) {
       return res.status(400).json({
         success: false,
@@ -20,18 +19,17 @@ export const subscribeEmail = async (req, res) => {
       .trim()
       .toLowerCase();
 
-    // Basic email validation
     const emailRegex =
       /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(normalizedEmail)) {
       return res.status(400).json({
         success: false,
-        message: "Please enter a valid email address.",
+        message:
+          "Please enter a valid email address.",
       });
     }
 
-    // Check existing subscriber
     const existingSubscriber =
       await Subscriber.findOne({
         email: normalizedEmail,
@@ -45,7 +43,6 @@ export const subscribeEmail = async (req, res) => {
       });
     }
 
-    // Create subscriber
     const subscriber =
       await Subscriber.create({
         email: normalizedEmail,
@@ -67,6 +64,80 @@ export const subscribeEmail = async (req, res) => {
       success: false,
       message:
         "Unable to subscribe. Please try again.",
+    });
+  }
+};
+
+// ===============================
+// Get Subscribers
+// ===============================
+
+export const getSubscribers = async (
+  req,
+  res
+) => {
+  try {
+    const subscribers =
+      await Subscriber.find({})
+        .sort({ createdAt: -1 })
+        .lean();
+
+    return res.status(200).json({
+      success: true,
+      count: subscribers.length,
+      subscribers,
+    });
+  } catch (error) {
+    console.error(
+      "Get Subscribers Error:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+      message:
+        "Unable to load subscribers.",
+    });
+  }
+};
+
+// ===============================
+// Delete Subscriber
+// ===============================
+
+export const deleteSubscriber = async (
+  req,
+  res
+) => {
+  try {
+    const { id } = req.params;
+
+    const subscriber =
+      await Subscriber.findByIdAndDelete(id);
+
+    if (!subscriber) {
+      return res.status(404).json({
+        success: false,
+        message:
+          "Subscriber not found.",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message:
+        "Subscriber deleted successfully.",
+    });
+  } catch (error) {
+    console.error(
+      "Delete Subscriber Error:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+      message:
+        "Unable to delete subscriber.",
     });
   }
 };

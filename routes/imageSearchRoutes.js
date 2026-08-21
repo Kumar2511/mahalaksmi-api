@@ -21,7 +21,7 @@ const upload = multer({
 
 router.post(
   "/",
-  upload.single("image"),
+  upload.single("media"),
   findProductByImage
 );
 

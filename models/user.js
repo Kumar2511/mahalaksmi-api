@@ -30,6 +30,13 @@ emailOtpExpiry: {
   type: Date,
 },
 
+pendingEmail: {
+  type: String,
+  default: "",
+  lowercase: true,
+  trim: true,
+},
+
 // Password reset verification
 passwordResetToken: {
   type: String,

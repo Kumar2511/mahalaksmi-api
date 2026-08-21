@@ -3,29 +3,51 @@ import Product from "../models/Product.js";
 
 export const getDashboardStats = async (req, res) => {
   try {
-    // ==========================
-    // Counts
-    // ==========================
-    const totalOrders = await Order.countDocuments();
+    // =========================================
+    // COUNTS
+    // =========================================
 
-    const totalProducts = await Product.countDocuments();
+    const [
+      totalOrders,
+      totalProducts,
+      totalCustomers,
+      pendingOrders,
+      lowStockProducts,
+      outOfStockProducts,
+    ] = await Promise.all([
+      Order.countDocuments(),
 
-    const totalCustomers = (
-      await Order.distinct("phone")
-    ).length;
+      Product.countDocuments(),
 
-    const pendingOrders = await Order.countDocuments({
-      orderStatus: "Pending",
-    });
+      // Unique customers based on phone
+      Order.distinct("phone").then((phones) => phones.length),
 
-    const lowStockProducts = await Product.countDocuments({
-      stock: { $lte: 5 },
-    });
+      Order.countDocuments({
+        orderStatus: "Pending",
+      }),
 
-    // ==========================
-    // Revenue
-    // ==========================
-    const revenue = await Order.aggregate([
+      Product.countDocuments({
+        stock: {
+          $gt: 0,
+          $lte: 5,
+        },
+      }),
+
+      Product.countDocuments({
+        stock: 0,
+      }),
+    ]);
+
+    // =========================================
+    // REVENUE
+    // =========================================
+
+    const revenueResult = await Order.aggregate([
+      {
+        $match: {
+          paymentStatus: "Paid",
+        },
+      },
       {
         $group: {
           _id: null,
@@ -37,21 +59,47 @@ export const getDashboardStats = async (req, res) => {
     ]);
 
     const totalRevenue =
-      revenue.length > 0 ? revenue[0].total : 0;
+      revenueResult.length > 0
+        ? Number(revenueResult[0].total || 0)
+        : 0;
 
-    // ==========================
-    // Latest Orders
-    // ==========================
+    // =========================================
+    // LATEST ORDERS
+    // =========================================
+
     const latestOrders = await Order.find()
       .sort({ createdAt: -1 })
-      .limit(5);
+      .limit(5)
+      .lean();
 
-    // ==========================
-    // Low Stock Products
-    // ==========================
+    // =========================================
+    // LOW STOCK PRODUCTS
+    // =========================================
+
     const lowStockList = await Product.find({
-      stock: { $lte: 5 },
-    }).limit(5);
+      stock: {
+        $gt: 0,
+        $lte: 5,
+      },
+    })
+      .sort({ stock: 1 })
+      .limit(5)
+      .lean();
+
+    // =========================================
+    // OUT OF STOCK PRODUCTS
+    // =========================================
+
+    const outOfStockList = await Product.find({
+      stock: 0,
+    })
+      .sort({ updatedAt: -1 })
+      .limit(5)
+      .lean();
+
+    // =========================================
+    // RESPONSE
+    // =========================================
 
     res.status(200).json({
       success: true,
@@ -63,21 +111,21 @@ export const getDashboardStats = async (req, res) => {
         totalCustomers,
         pendingOrders,
         lowStockProducts,
+        outOfStockProducts,
       },
 
       latestOrders,
 
       lowStockList,
+
+      outOfStockList,
     });
-
   } catch (error) {
-
-    console.error(error);
+    console.error("Dashboard Stats Error:", error);
 
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: error.message || "Failed to load dashboard statistics",
     });
-
   }
 };

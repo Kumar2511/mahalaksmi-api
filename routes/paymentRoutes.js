@@ -3,6 +3,8 @@ import express from "express";
 import {
   getPaymentSettings,
   updatePaymentSettings,
+  getPayments,
+  getPayment,
 } from "../controllers/paymentController.js";
 
 import {
@@ -12,10 +14,42 @@ import {
 
 const router = express.Router();
 
-// Public
-router.get("/", getPaymentSettings);
+// ===================================
+// PAYMENT SETTINGS
+// ===================================
 
-// Admin Only
-router.put("/", protect, admin, updatePaymentSettings);
+// Public
+router.get(
+  "/",
+  getPaymentSettings
+);
+
+// Admin
+router.put(
+  "/",
+  protect,
+  admin,
+  updatePaymentSettings
+);
+
+// ===================================
+// PAYMENT TRANSACTIONS
+// ===================================
+
+// Admin - all payments
+router.get(
+  "/transactions",
+  protect,
+  admin,
+  getPayments
+);
+
+// Admin - single payment
+router.get(
+  "/transactions/:id",
+  protect,
+  admin,
+  getPayment
+);
 
 export default router;

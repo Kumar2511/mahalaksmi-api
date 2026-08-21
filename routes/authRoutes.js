@@ -12,6 +12,7 @@ import {
  forgotPassword,
   verifyResetOTP,
   resetPassword,
+  deleteAccount,
 
   // Address APIs
   addAddress,
@@ -89,5 +90,11 @@ router.put("/address/:id", protect, updateAddress);
 
 // Delete Address
 router.delete("/address/:id", protect, deleteAddress);
+
+// ============================
+// Delete My Account
+// ============================
+
+router.delete("/account", protect, deleteAccount);
 
 export default router;

@@ -1,13 +1,22 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+import path from "path";
+import {
+  verifyEmailTransporter,
+} from "./utils/sendEmail.js";
 
 import connectDB from "./config/db.js";
+
 import customerLookRoutes from "./routes/customerRoutes.js";
 import couponRoutes from "./routes/couponRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
+import collectionRoutes from "./routes/collectionRoutes.js";
+import catalogImportRoutes from "./routes/catalogImportRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import stockNotificationRoutes from "./routes/stockNotificationRoutes.js";
 import upiRoutes from "./routes/upiRoutes.js";
@@ -18,96 +27,320 @@ import customerRoutes from "./routes/customerRoutes.js";
 import searchRoutes from "./routes/searchRoutes.js";
 import notificationRoutes from "./routes/notificationRoutes.js";
 import settingsRoutes from "./routes/settingsRoutes.js";
+import adminAppSettingsRoutes from "./routes/adminAppSettingsRoutes.js";
 import bannerRoutes from "./routes/bannerRoutes.js";
 import analyticsRoutes from "./routes/analyticsRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import shippingRoutes from "./routes/shippingRoutes.js";
-import taxRoutes from "./routes/taxRoutes.js"
+import taxRoutes from "./routes/taxRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import razorpayRoutes from "./routes/razorpayRoutes.js";
 import subscriberRoutes from "./routes/subscriberRoutes.js";
+import instagramImportRoutes from "./routes/instagramImportRoutes.js";
+// ==========================================
+// ENVIRONMENT CONFIGURATION
+// ==========================================
+
 dotenv.config();
 
-// ===============================
-// Connect Database
-// ===============================
+console.log(
+  "EMAIL_USER:",
+  process.env.EMAIL_USER
+    ? "✅ SET"
+    : "❌ MISSING"
+);
+
+console.log(
+  "EMAIL_PASS:",
+  process.env.EMAIL_PASS
+    ? "✅ SET"
+    : "❌ MISSING"
+);
+
+// ==========================================
+// VERIFY EMAIL TRANSPORTER
+// ==========================================
+
+console.log(
+  "📧 Checking Gmail email transporter..."
+);
+
+verifyEmailTransporter()
+  .then((ready) => {
+    if (ready) {
+      console.log(
+        "📧 Gmail email authentication is ready"
+      );
+    } else {
+      console.error(
+        "❌ Gmail email authentication failed"
+      );
+    }
+  })
+  .catch((error) => {
+    console.error(
+      "❌ Email transporter startup error:",
+      error
+    );
+  });
+
+// ==========================================
+// CONNECT DATABASE
+// ==========================================
+
 connectDB();
 
-const app = express();
+// ==========================================
+// CREATE EXPRESS APP
+// ==========================================
 
-// ===============================
-// Middleware
-// ===============================
-app.use(cors());
+const app = express();
+// ==========================================
+// STATIC UPLOADS
+// ==========================================
+
+app.use(
+  "/uploads",
+  express.static(
+    path.resolve(
+      process.cwd(),
+      "uploads"
+    )
+  )
+);
+// ==========================================
+// CORS
+// ==========================================
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:3001",
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests without an Origin header
+      // such as Postman/server-to-server requests.
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(
+        new Error("Not allowed by CORS")
+      );
+    },
+
+    credentials: true,
+  })
+);
+
+// ==========================================
+// BODY / COOKIE MIDDLEWARE
+// ==========================================
+
+app.use(cookieParser());
 
 app.use(express.json());
 
-app.use(express.urlencoded({ extended: true }));
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
 
-// ===============================
-// API Routes
-// ===============================
-app.use("/api/auth", authRoutes);
+// ==========================================
+// API ROUTES
+// ==========================================
 
-app.use("/api/products", productRoutes);
+// Authentication
+app.use(
+  "/api/auth",
+  authRoutes
+);
 
-app.use("/api/orders", orderRoutes);
+// Products
+app.use(
+  "/api/products",
+  productRoutes
+);
 
+// Categories
+app.use(
+  "/api/categories",
+  categoryRoutes
+);
+
+// Collections
+app.use(
+  "/api/collections",
+  collectionRoutes
+);
+
+// Catalog Import
+app.use(
+  "/api/catalog-import",
+  catalogImportRoutes
+);
+
+// Orders
+app.use(
+  "/api/orders",
+  orderRoutes
+);
+
+// Stock Notifications
 app.use(
   "/api/stock-notifications",
   stockNotificationRoutes
 );
 
-app.use("/api/reviews", reviewRoutes);
+// Reviews
+app.use(
+  "/api/reviews",
+  reviewRoutes
+);
 
-app.use("/api/image-search", imageSearchRoutes);
+// Image Search
+app.use(
+  "/api/image-search",
+  imageSearchRoutes
+);
 
-app.use("/api/dashboard", dashboardRoutes);
+// Dashboard
+app.use(
+  "/api/dashboard",
+  dashboardRoutes
+);
 
-app.use("/api/admin", adminRoutes);
+// Admin
+app.use(
+  "/api/admin",
+  adminRoutes
+);
 
-app.use("/api/upload", uploadRoutes);
+// Upload
+app.use(
+  "/api/upload",
+  uploadRoutes
+);
 
-app.use("/api/customers", customerRoutes);
+// Customers
+app.use(
+  "/api/customers",
+  customerRoutes
+);
 
-app.use("/api/search", searchRoutes);
+// Search
+app.use(
+  "/api/search",
+  searchRoutes
+);
 
-app.use("/api/notifications", notificationRoutes);
+// Notifications
+app.use(
+  "/api/notifications",
+  notificationRoutes
+);
 
-app.use("/api/settings", settingsRoutes);
+// Settings
+app.use(
+  "/api/settings",
+  settingsRoutes
+);
 
-app.use("/api/banners", bannerRoutes);
+// Admin App Settings
+app.use(
+  "/api/admin-app-settings",
+  adminAppSettingsRoutes
+);
 
-app.use("/api/analytics", analyticsRoutes);
+// Banners
+app.use(
+  "/api/banners",
+  bannerRoutes
+);
 
-app.use("/api/coupons", couponRoutes);
+// Analytics
+app.use(
+  "/api/analytics",
+  analyticsRoutes
+);
 
-app.use("/api/shipping", shippingRoutes);
+// Coupons
+app.use(
+  "/api/coupons",
+  couponRoutes
+);
 
-app.use("/api/tax", taxRoutes);
+// Shipping
+app.use(
+  "/api/shipping",
+  shippingRoutes
+);
 
-app.use("/api/payment", paymentRoutes);
+// Tax
+app.use(
+  "/api/tax",
+  taxRoutes
+);
 
-app.use("/api/upi", upiRoutes);
+// Payment
+app.use(
+  "/api/payment",
+  paymentRoutes
+);
 
-app.use("/api/razorpay", razorpayRoutes);
+// UPI
+app.use(
+  "/api/upi",
+  upiRoutes
+);
 
-app.use("/api/subscribers", subscriberRoutes);
+// Razorpay
+app.use(
+  "/api/razorpay",
+  razorpayRoutes
+);
 
-app.use("/api/customer-looks", customerRoutes);
-// ===============================
-// Home Route
-// ===============================
+// Subscribers
+app.use(
+  "/api/subscribers",
+  subscriberRoutes
+);
+
+// Customer Looks
+app.use(
+  "/api/customer-looks",
+  customerLookRoutes
+);
+
+// Instagram Bulk Import
+app.use(
+  "/api/instagram-import",
+  instagramImportRoutes
+);
+
+// ==========================================
+// HOME / HEALTH CHECK
+// ==========================================
+
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
-    message: "Mahalaksmi Jewelry API is Running 🚀",
+    message:
+      "Mahalaksmi Jewelry API is Running 🚀",
   });
 });
 
-// ===============================
-// 404 Route
-// ===============================
+// ==========================================
+// 404 ROUTE
+// ==========================================
+
 app.use((req, res) => {
   res.status(404).json({
     success: false,
@@ -115,14 +348,27 @@ app.use((req, res) => {
   });
 });
 
-// ===============================
-// Start Server
-// ===============================
-const PORT = process.env.PORT || 5000;
+// ==========================================
+// START SERVER
+// ==========================================
+
+const PORT =
+  process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log("--------------------------------------");
-  console.log(`🚀 Server Running`);
-  console.log(`🌐 http://localhost:${PORT}`);
-  console.log("--------------------------------------");
+  console.log(
+    "--------------------------------------"
+  );
+
+  console.log(
+    "🚀 Server Running"
+  );
+
+  console.log(
+    `🌐 http://localhost:${PORT}`
+  );
+
+  console.log(
+    "--------------------------------------"
+  );
 });

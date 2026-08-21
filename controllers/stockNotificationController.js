@@ -242,3 +242,46 @@ export const getStockNotifications =
       });
     }
   };
+  // ======================================
+// Admin - Delete / Decline Notification
+// ======================================
+
+export const deleteStockNotification = async (
+  req,
+  res
+) => {
+  try {
+    const notification =
+      await StockNotification.findById(
+        req.params.id
+      );
+
+    if (!notification) {
+      return res.status(404).json({
+        success: false,
+        message:
+          "Stock notification request not found.",
+      });
+    }
+
+    await notification.deleteOne();
+
+    return res.status(200).json({
+      success: true,
+      message:
+        "Stock notification request declined successfully.",
+    });
+  } catch (error) {
+    console.error(
+      "Delete Stock Notification Error:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+      message:
+        error.message ||
+        "Unable to decline stock notification request.",
+    });
+  }
+};

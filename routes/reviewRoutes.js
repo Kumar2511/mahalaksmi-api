@@ -6,6 +6,7 @@ import {
   getAllReviews,
   approveReview,
   deleteReview,
+  importReviews,
 } from "../controllers/reviewController.js";
 
 import {
@@ -30,6 +31,7 @@ router.post(
 // Public Product Reviews
 // ======================================
 
+// Get approved reviews for a product
 router.get(
   "/product/:productId",
   getProductReviews
@@ -45,6 +47,14 @@ router.get(
   protect,
   admin,
   getAllReviews
+);
+
+// Import Historical Reviews
+router.post(
+  "/import",
+  protect,
+  admin,
+  importReviews
 );
 
 // Approve Review

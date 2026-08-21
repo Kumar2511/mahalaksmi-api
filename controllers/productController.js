@@ -438,3 +438,323 @@ export const getRelatedProducts = async (req, res) => {
     });
   }
 };
+
+// ==============================
+// Import AI Preview Products
+// ==============================
+export const importAiPreviewProducts = async (req, res) => {
+  try {
+    const fs = await import("fs/promises");
+    const path = await import("path");
+
+    const previewPath = path.resolve(
+      process.cwd(),
+      "data",
+      "instagram-ai-preview.json"
+    );
+
+    const previewRaw =
+      await fs.readFile(previewPath, "utf8");
+
+    const preview = JSON.parse(previewRaw);
+
+    const results = Array.isArray(preview.results)
+      ? preview.results
+      : [];
+
+    // ==========================================
+    // TEST MODE
+    // Import ONLY the first successful product
+    // ==========================================
+
+    const result = results.find(
+      (item) =>
+        item?.success === true &&
+        item?.imported === false
+    );
+
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message:
+          "No successful AI preview product is available for import.",
+      });
+    }
+
+    const ai = result.product || {};
+
+    if (!ai.name || !ai.category) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "AI product is missing required name or category.",
+      });
+    }
+
+    // ==========================================
+    // Duplicate Protection
+    // ==========================================
+
+    const existingProduct =
+      await Product.findOne({
+        name: ai.name,
+      });
+
+    if (existingProduct) {
+      return res.status(409).json({
+        success: false,
+        message:
+          "A product with this name already exists.",
+        product: existingProduct,
+      });
+    }
+
+    // ==========================================
+    // Convert AI image path
+    // ==========================================
+
+    const images = [];
+
+    const mediaUploadPrefix =
+      "uploads/instagram-import/";
+
+    for (const imagePath of result.images || []) {
+      const normalized =
+        String(imagePath)
+          .replace(/\\/g, "/")
+          .replace(/^\/+/, "");
+
+      /*
+       * The preview JSON contains the catalog-relative
+       * path. Locate the matching file inside the
+       * instagram-import uploads directory.
+       */
+
+      const uploadsRoot = path.resolve(
+        process.cwd(),
+        "uploads",
+        "instagram-import"
+      );
+
+      let foundImage = null;
+
+      async function findFile(
+        directory
+      ) {
+        let entries;
+
+        try {
+          entries =
+            await fs.readdir(
+              directory,
+              {
+                withFileTypes: true,
+              }
+            );
+        } catch {
+          return null;
+        }
+
+        for (const entry of entries) {
+          const fullPath =
+            path.join(
+              directory,
+              entry.name
+            );
+
+          if (entry.isDirectory()) {
+            const found =
+              await findFile(
+                fullPath
+              );
+
+            if (found) {
+              return found;
+            }
+          }
+
+          if (
+            entry.isFile() &&
+            entry.name ===
+              path.basename(
+                normalized
+              )
+          ) {
+            return fullPath;
+          }
+        }
+
+        return null;
+      }
+
+      foundImage =
+        await findFile(
+          uploadsRoot
+        );
+
+      if (foundImage) {
+        const relativeUpload =
+          path
+            .relative(
+              path.resolve(
+                process.cwd()
+              ),
+              foundImage
+            )
+            .replace(/\\/g, "/");
+
+        images.push(
+          `/${relativeUpload}`
+        );
+      }
+    }
+
+    // ==========================================
+    // Create Product
+    // ==========================================
+
+    const productData = {
+      name: ai.name,
+
+      description:
+        ai.description || "",
+
+      category:
+        ai.category ||
+        result.category ||
+        "Jewellery",
+
+      collection:
+        "AI Imported",
+
+      // Admin-controlled values
+      price: 0,
+
+      discountPrice: 0,
+
+      images,
+
+      video: "",
+
+      colors: [],
+
+      sizes: [],
+
+      specifications: {
+        material:
+          ai.material || "",
+
+        jewelleryType:
+          ai.jewelleryType || "",
+
+        metalPlating:
+          ai.metalPlating || "",
+
+        stone:
+          ai.stone || "",
+
+        weight:
+          ai.weight || "",
+
+        occasion:
+          ai.occasion || "",
+
+        countryOfOrigin:
+          ai.countryOfOrigin ||
+          "India",
+      },
+
+      stock: 0,
+
+      featured: false,
+
+      bestSeller: false,
+
+      newArrival: true,
+
+      trending: false,
+
+      instagramLink: "",
+
+      reviews: [],
+
+      numReviews: 0,
+
+      averageRating: 0,
+    };
+
+    const createdProduct =
+      await Product.create(
+        productData
+      );
+
+    // ==========================================
+    // Mark AI result as imported
+    // ==========================================
+
+    const resultIndex =
+      results.findIndex(
+        (item) =>
+          String(
+            item.mediaId
+          ) ===
+          String(
+            result.mediaId
+          )
+      );
+
+    if (resultIndex >= 0) {
+      results[
+        resultIndex
+      ].imported = true;
+
+      results[
+        resultIndex
+      ].productId =
+        String(
+          createdProduct._id
+        );
+    }
+
+    await fs.writeFile(
+      previewPath,
+      JSON.stringify(
+        {
+          ...preview,
+          results,
+        },
+        null,
+        2
+      ),
+      "utf8"
+    );
+
+    return res.status(201).json({
+      success: true,
+
+      message:
+        "AI product imported successfully.",
+
+      product:
+        createdProduct,
+
+      aiConfidence:
+        ai.confidence ?? null,
+
+      mediaId:
+        result.mediaId,
+    });
+  } catch (error) {
+    console.error(
+      "AI Preview Import Error:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false,
+      message:
+        error?.message ||
+        "Failed to import AI preview product.",
+    });
+  }
+};

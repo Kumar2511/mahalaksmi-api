@@ -7,6 +7,7 @@ import {
   updateProduct,
   deleteProduct,
   importDefaultProducts,
+  importAiPreviewProducts,
   getFeaturedProducts,
   getBestSellerProducts,
   getNewArrivalProducts,
@@ -57,6 +58,17 @@ router.post(
   protect,
   admin,
   importDefaultProducts
+);
+
+// ========================================
+// Import AI Preview Products
+// ========================================
+
+router.post(
+  "/import-ai-preview",
+  protect,
+  admin,
+  importAiPreviewProducts
 );
 
 // Update Product

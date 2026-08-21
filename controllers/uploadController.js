@@ -2,22 +2,40 @@ import cloudinary from "../config/cloudinary.js";
 import fs from "fs";
 
 export const uploadMedia = async (req, res) => {
-  console.log("========== Upload API Hit ==========");
+  console.log(
+    "========== Upload API Hit =========="
+  );
+
   console.log("File:", req.file);
   console.log("Body:", req.body);
 
   try {
+    // ==========================================
+    // Validate File
+    // ==========================================
+
     if (!req.file) {
       return res.status(400).json({
         success: false,
-        message: "No file uploaded",
+        message: "No file uploaded.",
       });
     }
 
-    const folder =
-      req.body.folder || "mahalaksmi-products";
+    // ==========================================
+    // Folder
+    // ==========================================
 
-    console.log("Uploading media to Cloudinary...");
+    const folder =
+      req.body.folder ||
+      "mahalaksmi-products";
+
+    console.log(
+      "Uploading media to Cloudinary..."
+    );
+
+    // ==========================================
+    // Upload to Cloudinary
+    // ==========================================
 
     const result =
       await cloudinary.uploader.upload(
@@ -38,7 +56,10 @@ export const uploadMedia = async (req, res) => {
       result.resource_type
     );
 
-    // Remove temporary local file
+    // ==========================================
+    // Delete Temporary File
+    // ==========================================
+
     try {
       fs.unlinkSync(req.file.path);
     } catch (deleteError) {
@@ -48,22 +69,43 @@ export const uploadMedia = async (req, res) => {
       );
     }
 
+    // ==========================================
+    // Response
+    // ==========================================
+
     return res.status(200).json({
       success: true,
 
-      // Used by existing image upload code
-      imageUrl: result.secure_url,
-
-      // Used by video upload code
       mediaUrl: result.secure_url,
+
+      // Keep imageUrl for backward compatibility
+      imageUrl:
+        result.resource_type === "image"
+          ? result.secure_url
+          : "",
+
+      videoUrl:
+        result.resource_type === "video"
+          ? result.secure_url
+          : "",
 
       resourceType:
         result.resource_type,
 
-      format: result.format,
+      format:
+        result.format,
 
       publicId:
         result.public_id,
+
+      width:
+        result.width || null,
+
+      height:
+        result.height || null,
+
+      duration:
+        result.duration || null,
     });
   } catch (error) {
     console.error(
@@ -71,16 +113,23 @@ export const uploadMedia = async (req, res) => {
       error
     );
 
-    // Remove temporary file if upload fails
+    // ==========================================
+    // Delete Temporary File
+    // ==========================================
+
     if (req.file?.path) {
       try {
-        fs.unlinkSync(req.file.path);
+        fs.unlinkSync(
+          req.file.path
+        );
       } catch {}
     }
 
     return res.status(500).json({
       success: false,
-      message: error.message,
+      message:
+        error.message ||
+        "Media upload failed.",
     });
   }
 };

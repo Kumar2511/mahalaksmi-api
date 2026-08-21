@@ -5,6 +5,7 @@ import {
   getMyOrders,
   getMyOrder,
   cancelMyOrder,
+  adminCancelOrder,
   submitCancellationFeedback,
 
   // UPI Payment
@@ -91,6 +92,14 @@ router.get(
   getOrders
 );
 
+// Admin Cancel Order
+router.post(
+  "/:id/cancel",
+  protect,
+  admin,
+  adminCancelOrder
+);
+
 // Get Single Order - Admin
 router.get(
   "/:id",
@@ -114,7 +123,6 @@ router.delete(
   admin,
   deleteOrder
 );
-
 // ======================================
 // ADMIN UPI PAYMENT VERIFICATION
 // ======================================

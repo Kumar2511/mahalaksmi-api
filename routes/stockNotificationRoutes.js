@@ -4,6 +4,7 @@ import {
   subscribeStockNotification,
   checkStockNotification,
   getStockNotifications,
+  deleteStockNotification,
 } from "../controllers/stockNotificationController.js";
 
 import {
@@ -41,4 +42,11 @@ router.get(
   getStockNotifications
 );
 
+// Decline notification request
+router.delete(
+  "/admin/:id",
+  protect,
+  admin,
+  deleteStockNotification
+);
 export default router;

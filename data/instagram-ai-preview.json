@@ -1,0 +1,1242 @@
+{
+  "generatedAt": "2026-08-20T10:44:15.915Z",
+  "mode": "IMAGE_ONLY",
+  "totalGroups": 48,
+  "totalImages": 74,
+  "successful": 37,
+  "failed": 11,
+  "videosImported": 0,
+  "results": [
+    {
+      "success": true,
+      "category": "Necklaces",
+      "mediaId": "3816504180358607578",
+      "groupName": "group_3816504180358607578",
+      "imageCount": 1,
+      "images": [
+        "Necklaces\\group_3816504180358607578\\the_girl_ho_se_JUST_A_GIRL_and_HER_JEWELRY_Unstoppable_Duo✨_2026-01-23_DT28lTSEXLa_3816504180358607578.jpg"
+      ],
+      "product": {
+        "name": "Traditional Antique Gold Plated Temple Jewellery Lakshmi Haram Necklace",
+        "category": "Necklaces",
+        "description": "An exquisite traditional temple necklace featuring an intricate Goddess Lakshmi motif in an antique gold finish. Beautifully embellished with red and green accent stones and completed with elegant hanging pearl drops, perfect for grand festive and traditional occasions.",
+        "material": "Alloy",
+        "jewelleryType": "Temple Haram Necklace",
+        "metalPlating": "Antique Gold",
+        "stone": "Pearl, Ruby, Emerald",
+        "weight": "",
+        "occasion": "Traditional",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image clearly depicts a traditional Indian long temple necklace (Haram) featuring antique gold plating, a central Goddess Lakshmi pendant design, embedded pink/red and green stones, and hanging pearl embellishments.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Necklaces",
+      "mediaId": "3818521054562814590",
+      "groupName": "group_3818521054562814590",
+      "imageCount": 2,
+      "images": [
+        "Necklaces\\group_3818521054562814590\\the_girl_ho_se_Shining_bright,_just_like_jewels✨_📥DM_to_order_fast_shipping_2026-01-26_DT-HKrwkQp-_3818521054562814590.jpg",
+        "Necklaces\\group_3818521054562814590\\the_girl_ho_se_Shining_bright,_just_like_jewels✨_📥DM_to_order_fast_shipping_2026-01-26_DT-HKrwkQp-_3818521054562814590_2.jpg"
+      ],
+      "product": {
+        "name": "Traditional Antique Gold Plated Elephant Motif Necklace Set",
+        "category": "Jewellery Sets",
+        "description": "An exquisite traditional temple jewellery set featuring a short necklace with detailed elephant motifs studded with ruby-red and emerald-green stones. The piece is accented by a central jhumka pendant embellished with white stones and pearl drops, paired with matching elephant stud earrings.",
+        "material": "Alloy, Synthetic Stones, Faux Pearls",
+        "jewelleryType": "Temple Jewellery Set",
+        "metalPlating": "Antique Gold",
+        "stone": "Ruby, Emerald, CZ, Pearl",
+        "weight": "",
+        "occasion": "Festive",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "Image 1 shows the full set including an elephant-motif necklace with a central jhumka pendant and matching elephant stud earrings on a display mannequin. Image 2 shows the necklace worn on a model, confirming its choker/short length design and stone details.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 2
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Necklaces",
+      "mediaId": "3822326582888071119",
+      "groupName": "group_3822326582888071119",
+      "imageCount": 5,
+      "images": [
+        "Necklaces\\group_3822326582888071119\\the_girl_ho_se_Invisible_threads,_unforgettable_sparkle_✨_DM_for_price_deta_2026-01-31_DULocaMk3_P_3822326582888071119.jpg",
+        "Necklaces\\group_3822326582888071119\\the_girl_ho_se_Invisible_threads,_unforgettable_sparkle_✨_DM_for_price_deta_2026-01-31_DULocaMk3_P_3822326582888071119_2.jpg",
+        "Necklaces\\group_3822326582888071119\\the_girl_ho_se_Invisible_threads,_unforgettable_sparkle_✨_DM_for_price_deta_2026-01-31_DULocaMk3_P_3822326582888071119_3.jpg",
+        "Necklaces\\group_3822326582888071119\\the_girl_ho_se_Invisible_threads,_unforgettable_sparkle_✨_DM_for_price_deta_2026-01-31_DULocaMk3_P_3822326582888071119_4.jpg",
+        "Necklaces\\group_3822326582888071119\\the_girl_ho_se_Invisible_threads,_unforgettable_sparkle_✨_DM_for_price_deta_2026-01-31_DULocaMk3_P_3822326582888071119_5.jpg"
+      ],
+      "product": {
+        "name": "Traditional Gold Plated Minimalist Pendant Necklace",
+        "category": "Necklaces",
+        "description": "An elegant gold-plated delicate chain necklace featuring traditional Indian pendant motifs such as deities, lotus, floral designs, and traditional figures. Beautifully accented with gold beads, vibrant enamel work, ruby and emerald-colored stones, and pearl drops.",
+        "material": "Alloy",
+        "jewelleryType": "Pendant Necklace",
+        "metalPlating": "Gold",
+        "stone": "Ruby, Emerald, Pearl",
+        "weight": "",
+        "occasion": "Festive",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "Visual evidence shows a collection of delicate gold-plated wire necklaces with traditional motif pendants (elephant, Goddess Lakshmi, floral, lotus) embellished with enamel, pearls, and red/green stones.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 5
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Necklaces",
+      "mediaId": "3828764925402091301",
+      "groupName": "group_3828764925402091301",
+      "imageCount": 1,
+      "images": [
+        "Necklaces\\group_3828764925402091301\\the_girl_ho_se_​_Attigai_Because_some_classics_never_go_out_of_style._#Trad_2026-02-09_DUigWn7EQ8l_3828764925402091301.jpg"
+      ],
+      "product": {
+        "name": "Gold Plated Floral CZ Pendant Necklace Set",
+        "category": "Jewellery Sets",
+        "description": "An elegant gold-plated necklace set featuring a braided chain with a floral motif pendant studded with clear CZ stones, complemented by a pair of matching floral stud earrings.",
+        "material": "Alloy",
+        "jewelleryType": "Pendant Necklace Set",
+        "metalPlating": "Gold",
+        "stone": "CZ",
+        "weight": "",
+        "occasion": "Festive",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image displays a matching set consisting of a woven gold-tone chain necklace with a floral cluster pendant set with clear stones and a pair of matching stud earrings.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Necklaces",
+      "mediaId": "3831016615325190248",
+      "groupName": "group_3831016615325190248",
+      "imageCount": 1,
+      "images": [
+        "Necklaces\\group_3831016615325190248\\the_girl_ho_se_Keeping_it_simple,_but_significant🪩_#jewelwholesaleinindia_#_2026-02-12_DUqgVBlE8ho_3831016615325190248.jpg"
+      ],
+      "product": {
+        "name": "Gold Plated Cushion Cut Green Stone and CZ Pendant Necklace Set",
+        "category": "Jewellery Sets",
+        "description": "An elegant gold-plated jewellery set featuring a sleek chain necklace with a centered cushion-cut green stone surrounded by a sparkling halo of CZ stones. Complemented by a pair of matching square halo stud earrings, this minimal set is ideal for festive gatherings, parties, and special occasions.",
+        "material": "Alloy",
+        "jewelleryType": "Pendant Necklace Set",
+        "metalPlating": "Gold",
+        "stone": "Emerald, CZ",
+        "weight": "",
+        "occasion": "Party",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "Visual evidence shows a matching set composed of a gold-toned snake/mesh chain necklace with a square green central stone with CZ halo, and two identical matching stud earrings displayed on a mannequin.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Necklaces",
+      "mediaId": "3831732027692121226",
+      "groupName": "group_3831732027692121226",
+      "imageCount": 1,
+      "images": [
+        "Necklaces\\group_3831732027692121226\\the_girl_ho_se_-_Dazzle_with_a_story,_shine_with_elegance_✨_#jewelcollectio_2026-02-13_DUtC_pRE3yK_3831732027692121226.jpg"
+      ],
+      "product": {
+        "name": "Gold Plated Teardrop CZ Pendant Necklace",
+        "category": "Necklaces",
+        "description": "A delicate gold-plated chain necklace featuring subtle gold beads along the strand and a shimmering teardrop-shaped clear CZ pendant at the center. Ideal for minimal everyday style or special occasions.",
+        "material": "Alloy",
+        "jewelleryType": "Pendant Necklace",
+        "metalPlating": "Gold",
+        "stone": "CZ",
+        "weight": "",
+        "occasion": "Casual",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image shows a thin gold-plated chain featuring small round beads and a centered teardrop clear stone pendant mounted on a black mannequin display bust.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Necklaces",
+      "mediaId": "3836040266260182963",
+      "groupName": "group_3836040266260182963",
+      "imageCount": 1,
+      "images": [
+        "Necklaces\\group_3836040266260182963\\the_girl_ho_se_Grace_in_every_detail,_A_double-layered_masterpiece_designed_2026-02-19_DU8WkxGiHez_3836040266260182963.jpg"
+      ],
+      "product": {
+        "name": "Gold Plated Layered Necklace with Pink Square CZ Stones",
+        "category": "Necklaces",
+        "description": "An elegant double-layered gold-plated necklace featuring sleek minimal chains accented with golden tube bars and sparkling square-cut light pink stones. A modern and delicate piece ideal for adding subtle glam to casual and party outfits.",
+        "material": "Alloy",
+        "jewelleryType": "Layered Necklace",
+        "metalPlating": "Gold",
+        "stone": "CZ",
+        "weight": "",
+        "occasion": "Party",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image shows a clear visual of a two-tier layered gold-toned necklace on a bust display, adorned with metallic bar accents and central pink square stones.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Necklaces",
+      "mediaId": "3836768814986537859",
+      "groupName": "group_3836768814986537859",
+      "imageCount": 1,
+      "images": [
+        "Necklaces\\group_3836768814986537859\\the_girl_ho_se_Timeless_elegance_in_every_flutter_✨🤍_#jewelcollections_#Lak_2026-02-20_DU-8Oi-kauD_3836768814986537859.jpg"
+      ],
+      "product": {
+        "name": "Traditional Gold-Plated Pendant Necklace with Pearl Drops",
+        "category": "Necklaces",
+        "description": "An elegant gold-plated pendant necklace featuring a delicate chain with a traditional textured central motif. The pendant is accented with subtle pink stones and finished with tiny hanging pearl drops for a sophisticated ethnic look.",
+        "material": "Metal, Stones, Pearl",
+        "jewelleryType": "Pendant Necklace",
+        "metalPlating": "Gold",
+        "stone": "Pearl, Ruby",
+        "weight": "",
+        "occasion": "Festive",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image shows a delicate gold-toned chain necklace with an ornate central pendant featuring red/pink stone accents and small pearl drops, displayed on a black bust mannequin.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Necklaces",
+      "mediaId": "3837972253598903751",
+      "groupName": "group_3837972253598903751",
+      "imageCount": 2,
+      "images": [
+        "Necklaces\\group_3837972253598903751\\the_girl_ho_se_Timeless_grace_captured_in_gold._This_double-layered_necklac_2026-02-22_DVDN24hkW3H_3837972253598903751.jpg",
+        "Necklaces\\group_3837972253598903751\\the_girl_ho_se_Timeless_grace_captured_in_gold._This_double-layered_necklac_2026-02-22_DVDN24hkW3H_3837972253598903751_2.jpg"
+      ],
+      "product": {
+        "name": "Traditional Gold-Plated Layered Necklace with Green Stone and Temple Pendant",
+        "category": "Necklaces",
+        "description": "Elevate your ethnic attire with this exquisite double-layered gold-plated necklace. The top layer showcases a vibrant square-cut green stone, while the lower layer features a traditional temple-style Lakshmi motif pendant, creating a perfect blend of modern elegance and timeless Indian heritage.",
+        "material": "Alloy",
+        "jewelleryType": "Layered Necklace",
+        "metalPlating": "Gold",
+        "stone": "Green Stone",
+        "weight": "",
+        "occasion": "Festive",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The product features two layers of fine gold-toned chain/cord: the upper tier holds a square green faceted stone, and the lower tier holds an ornate temple-style coin pendant with Goddess Lakshmi detailing and a small green accent stone.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 2
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Necklaces",
+      "mediaId": "3838925497733060696",
+      "groupName": "group_3838925497733060696",
+      "imageCount": 1,
+      "images": [
+        "Necklaces\\group_3838925497733060696\\the_girl_ho_se_Make_every_occasion_special_with_our_intricately_designed_Te_2026-02-23_DVGmmaTkZhY_3838925497733060696.jpg"
+      ],
+      "product": {
+        "name": "Traditional Antique Gold Temple Long Necklace Set",
+        "category": "Jewellery Sets",
+        "description": "An exquisite antique gold-plated long necklace set featuring textured golden beads intertwined with red stone accents. The center highlight is a circular temple motif pendant adorned with red and green stones and hanging bead drops. Comes paired with matching stud earrings.",
+        "material": "Alloy",
+        "jewelleryType": "Temple Long Necklace Set",
+        "metalPlating": "Antique Gold",
+        "stone": "Ruby, Emerald",
+        "weight": "",
+        "occasion": "Traditional",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "Visuals show a long antique gold-plated chain necklace with a circular temple motif pendant set with green and red stones, displayed along with matching earrings.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Necklaces",
+      "mediaId": "3842640744805527769",
+      "groupName": "group_3842640744805527769",
+      "imageCount": 1,
+      "images": [
+        "Necklaces\\group_3842640744805527769\\the_girl_ho_se_Simplicity_is_the_ultimate_sophistication_._✨_#jewelobsessio_2026-02-28_DVTzWXxk3DZ_3842640744805527769.jpg"
+      ],
+      "product": {
+        "name": "Dual Layer Minimalist Gold Plated Pendant Necklace",
+        "category": "Necklaces",
+        "description": "An elegant double-layer gold-plated necklace featuring fine chain strands with metallic tube beads. The upper strand showcases a subtle light-colored square stone, while the lower strand drops into a vibrant green pear-cut crystal pendant, offering a modern chic aesthetic.",
+        "material": "Alloy",
+        "jewelleryType": "Layered Necklace",
+        "metalPlating": "Gold",
+        "stone": "Crystal",
+        "weight": "",
+        "occasion": "Casual",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image clearly displays a two-strand layered gold-toned necklace mounted on a display bust. The upper layer features a small square light stone flanked by metal tube beads, while the lower strand features a teardrop-shaped green stone pendant.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Necklaces",
+      "mediaId": "3843158658377669808",
+      "groupName": "group_3843158658377669808",
+      "imageCount": 4,
+      "images": [
+        "Necklaces\\group_3843158658377669808\\the_girl_ho_se_Timeless_design_meets_irresistible_value._Shop_curated_fine_2026-03-01_DVVpHAYEVyw_3843158658377669808.jpg",
+        "Necklaces\\group_3843158658377669808\\the_girl_ho_se_Timeless_design_meets_irresistible_value._Shop_curated_fine_2026-03-01_DVVpHAYEVyw_3843158658377669808_2.jpg",
+        "Necklaces\\group_3843158658377669808\\the_girl_ho_se_Timeless_design_meets_irresistible_value._Shop_curated_fine_2026-03-01_DVVpHAYEVyw_3843158658377669808_3.jpg",
+        "Necklaces\\group_3843158658377669808\\the_girl_ho_se_Timeless_design_meets_irresistible_value._Shop_curated_fine_2026-03-01_DVVpHAYEVyw_3843158658377669808_4.jpg"
+      ],
+      "product": {
+        "name": "Delicate Gold Plated Short Necklace with Green Stone Accent",
+        "category": "Necklaces",
+        "description": "An elegant and minimalist gold-plated necklace featuring a thin, delicate chain paired with a vibrant green stone accent. Perfectly designed to add a graceful touch to traditional Indian ethnic wear like sarees.",
+        "material": "Alloy",
+        "jewelleryType": "Pendant Necklace",
+        "metalPlating": "Gold",
+        "stone": "Emerald",
+        "weight": "",
+        "occasion": "Traditional",
+        "countryOfOrigin": "India",
+        "confidence": 0.85,
+        "reasoning": "The images show a delicate gold-plated necklace with a green stone focal point worn alongside traditional Indian saree attire.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 4
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Necklaces",
+      "mediaId": "3853165677381799382",
+      "groupName": "group_3853165677381799382",
+      "imageCount": 1,
+      "images": [
+        "Necklaces\\group_3853165677381799382\\the_girl_ho_se_🌷🤍_#simplelook_#uniquedesign_#stylish_#thegirlho_se💗_#instaj_2026-03-15_DV5McTFEc3W_3853165677381799382.jpg"
+      ],
+      "product": {
+        "name": "Gold Plated Fairy Motif Pendant Necklace",
+        "category": "Necklaces",
+        "description": "A charming gold-plated fine chain necklace featuring a delicate fairy or angel-shaped pendant encrusted with sparkling clear cubic zirconia stones. Designed with small gold beads above the pendant for an elegant look.",
+        "material": "Alloy",
+        "jewelleryType": "Pendant Necklace",
+        "metalPlating": "Gold",
+        "stone": "CZ",
+        "weight": "",
+        "occasion": "Casual",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image shows a delicate yellow gold-toned chain holding a winged fairy/angel pendant embellished with clear stones and accent beads.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Necklaces",
+      "mediaId": "3858243303616097728",
+      "groupName": "group_3858243303616097728",
+      "imageCount": 2,
+      "images": [
+        "Necklaces\\group_3858243303616097728\\the_girl_ho_se_Rooted_in_tradition,_radiating_with_grace._Nothing_beats_the_2026-03-22_DWLO9fBES3A_3858243303616097728.jpg",
+        "Necklaces\\group_3858243303616097728\\the_girl_ho_se_Rooted_in_tradition,_radiating_with_grace._Nothing_beats_the_2026-03-22_DWLO9fBES3A_3858243303616097728_2.jpg"
+      ],
+      "product": {
+        "name": "Traditional Gold Plated Green Stone and Pearl Pendant Necklace",
+        "category": "Necklaces",
+        "description": "An elegant gold-plated pendant necklace featuring a delicate sleek chain paired with an ethnic arc-shaped pendant. The pendant highlights a central green stone framed by clear accent stones and finished with a fringe of small hanging pearl drops.",
+        "material": "Alloy",
+        "jewelleryType": "Pendant Necklace",
+        "metalPlating": "Gold",
+        "stone": "Pearl, Emerald, CZ",
+        "weight": "",
+        "occasion": "Festive",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "Visual evidence shows a fine gold-toned chain holding a small traditional pendant centered with a green stone, surrounded by clear stones and tiny pearl hanging beads.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 2
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Necklaces",
+      "mediaId": "3863565208321648835",
+      "groupName": "group_3863565208321648835",
+      "imageCount": 3,
+      "images": [
+        "Necklaces\\group_3863565208321648835\\the_girl_ho_se_🪷🤍_The_finishing_touch_that_makes_the_outfit._Jewels_@the_gi_2026-03-29_DWeJBZAkejD_3863565208321648835.jpg",
+        "Necklaces\\group_3863565208321648835\\the_girl_ho_se_🪷🤍_The_finishing_touch_that_makes_the_outfit._Jewels_@the_gi_2026-03-29_DWeJBZAkejD_3863565208321648835_2.jpg",
+        "Necklaces\\group_3863565208321648835\\the_girl_ho_se_🪷🤍_The_finishing_touch_that_makes_the_outfit._Jewels_@the_gi_2026-03-29_DWeJBZAkejD_3863565208321648835_3.jpg"
+      ],
+      "product": {
+        "name": "Traditional Antique Gold Temple Pendant Necklace Set",
+        "category": "Jewellery Sets",
+        "description": "An elegant traditional South Indian temple jewellery set featuring an intricately crafted temple motif pendant on an embellished chain, paired with matching traditional jhumka earrings.",
+        "material": "Metal",
+        "jewelleryType": "Temple Jewellery Set",
+        "metalPlating": "Antique Gold",
+        "stone": "",
+        "weight": "",
+        "occasion": "Traditional",
+        "countryOfOrigin": "India",
+        "confidence": 0.92,
+        "reasoning": "The photos show a model styled in a saree wearing an antique gold-plated South Indian temple necklace featuring a rectangular motif pendant and coordinating jhumka earrings.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 3
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Necklaces",
+      "mediaId": "3878068218586303541",
+      "groupName": "group_3878068218586303541",
+      "imageCount": 4,
+      "images": [
+        "Necklaces\\group_3878068218586303541\\the_girl_ho_se_Weightless,_yet_unbreakable._✨_#fyp_#jewelobsession_#insta_#_2026-04-18_DXRqn93kYw1_3878068218586303541.jpg",
+        "Necklaces\\group_3878068218586303541\\the_girl_ho_se_Weightless,_yet_unbreakable._✨_#fyp_#jewelobsession_#insta_#_2026-04-18_DXRqn93kYw1_3878068218586303541_2.jpg",
+        "Necklaces\\group_3878068218586303541\\the_girl_ho_se_Weightless,_yet_unbreakable._✨_#fyp_#jewelobsession_#insta_#_2026-04-18_DXRqn93kYw1_3878068218586303541_3.jpg",
+        "Necklaces\\group_3878068218586303541\\the_girl_ho_se_Weightless,_yet_unbreakable._✨_#fyp_#jewelobsession_#insta_#_2026-04-18_DXRqn93kYw1_3878068218586303541_4.jpg"
+      ],
+      "product": {
+        "name": "Minimalist Gold Plated Wire Pendant Necklace",
+        "category": "Necklaces",
+        "description": "A delicate and stylish gold-plated wire chain necklace featuring elegant minimal charms decorated with sparkling crystals, pearls, and colorful accent stones. Designed for light, everyday wear or subtle layering.",
+        "material": "Alloy",
+        "jewelleryType": "Pendant Necklace",
+        "metalPlating": "Gold",
+        "stone": "CZ, Pearl, Crystal",
+        "weight": "",
+        "occasion": "Casual",
+        "countryOfOrigin": "India",
+        "confidence": 0.9,
+        "reasoning": "The images show fine gold-toned wire/cable strand necklaces featuring delicate charm pendants embellished with CZ crystals, red stones, and pearls.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 4
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Jewellery-Sets",
+      "mediaId": "3819396028286720600",
+      "groupName": "group_3819396028286720600",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3819396028286720600\\the_girl_ho_se_Own_original_picture_quality_updated_from_Thegirlho_se🤎_#fas_2026-01-27_DUBOHOikVpY_3819396028286720600.jpg"
+      ],
+      "product": {
+        "name": "Gold Plated Emerald Green and CZ Stone Pendant Necklace Set",
+        "category": "Jewellery Sets",
+        "description": "An elegant gold-plated pendant necklace set featuring sparkling clear CZ stones and a striking central green emerald-toned stone. Comes complete with a pair of matching stone-studded earrings, perfect for adding a touch of traditional glamour to festive attire.",
+        "material": "Alloy",
+        "jewelleryType": "Pendant Necklace Set",
+        "metalPlating": "Gold",
+        "stone": "CZ, Emerald",
+        "weight": "",
+        "occasion": "Festive",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image clearly shows a matching gold-toned jewellery set containing a chain necklace with a green and clear stone-studded pendant, alongside a matching pair of small hanging earrings.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Jewellery-Sets",
+      "mediaId": "3820128058385583655",
+      "groupName": "group_3820128058385583655",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3820128058385583655\\the_girl_ho_se_Classic_pieces_never_go_out_of_style_✨_Style_with_#thegirlho_2026-01-28_DUD0jqsk04n_3820128058385583655.jpg"
+      ],
+      "product": {
+        "name": "Traditional Gold Plated Peacock Pendant Necklace Set",
+        "category": "Jewellery Sets",
+        "description": "An elegant gold-plated necklace set featuring a finely crafted peacock motif pendant studded with vibrant green, ruby pink, and sparkling CZ stones. The set includes a sturdy braided gold-toned chain and a pair of matching peacock stud earrings, ideal for festive and traditional celebrations.",
+        "material": "Alloy",
+        "jewelleryType": "Necklace Set",
+        "metalPlating": "Gold",
+        "stone": "CZ, Emerald, Ruby",
+        "weight": "",
+        "occasion": "Traditional",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image clearly shows a complete jewellery set consisting of a gold-finished chain necklace with a peacock pendant set with green, pink, and white stones, along with matching peacock-shaped stud earrings.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Jewellery-Sets",
+      "mediaId": "3820813719270667929",
+      "groupName": "group_3820813719270667929",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3820813719270667929\\the_girl_ho_se_You_are_precious,_wear_precious_jewelry_🪄_#jewellove_#jewelr_2026-01-29_DUGQdWKETaZ_3820813719270667929.jpg"
+      ],
+      "product": {
+        "name": "Traditional Antique Gold Lakshmi Temple Jewellery Set with Coral Beads",
+        "category": "Jewellery Sets",
+        "description": "An exquisite Indian traditional temple jewellery set featuring a long haram necklace crafted with red/orange coral-style cylindrical beads and textured gold-toned beads. The grand centerpiece features an intricate temple Gopuram design with a Goddess Lakshmi motif, lined with vibrant green stones and gold bead drops. The set includes a pair of matching antique gold jhumka earrings with green stone accents.",
+        "material": "Base Metal, Beads",
+        "jewelleryType": "Temple Jewellery Set",
+        "metalPlating": "Antique Gold",
+        "stone": "Coral, Emerald",
+        "weight": "",
+        "occasion": "Traditional",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image features a cohesive Indian traditional temple jewellery set consisting of a long beaded necklace with a Goddess Lakshmi gopuram pendant adorned with green stones, paired with matching gold-toned jhumka earrings.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Jewellery-Sets",
+      "mediaId": "3821551117306824204",
+      "groupName": "group_3821551117306824204",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3821551117306824204\\the_girl_ho_se_Shine_bright_with_pieces_that_make_a_statement_💎_#StylishJew_2026-01-30_DUI4H5mEgYM_3821551117306824204.jpg"
+      ],
+      "product": {
+        "name": "Gold Plated CZ Studded Wave Necklace and Earring Set",
+        "category": "Jewellery Sets",
+        "description": "An elegant gold-plated jewellery set featuring a sleek, modern wave-motif necklace adorned with sparkling clear CZ stones, paired with matching curved earrings. Ideal for evening wear, parties, and special occasions.",
+        "material": "Alloy",
+        "jewelleryType": "Necklace and Earring Set",
+        "metalPlating": "Gold",
+        "stone": "CZ",
+        "weight": "",
+        "occasion": "Party",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image clearly shows a matching jewellery set consisting of a slender gold-toned necklace with pavé-set clear stones in a wavy design and a pair of matching wave-shaped earrings displayed on a black neck bust.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Jewellery-Sets",
+      "mediaId": "3823725941869350593",
+      "groupName": "group_3823725941869350593",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3823725941869350593\\the_girl_ho_se_Shine_on!_✨_#JewelryLover_#jewelcollections_#thegirlhouse_#j_2026-02-02_DUQmnwzkY7B_3823725941869350593.jpg"
+      ],
+      "product": {
+        "name": "Traditional Gold Plated Green and White CZ Necklace Set",
+        "category": "Jewellery Sets",
+        "description": "An elegant gold-plated necklace set featuring circular cluster motifs embellished with sparkling white CZ stones and vibrant green center stones, complemented by a pair of matching earrings.",
+        "material": "Alloy",
+        "jewelleryType": "Necklace Set",
+        "metalPlating": "Gold",
+        "stone": "CZ, Emerald",
+        "weight": "",
+        "occasion": "Festive",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image shows a matching necklace and earring set featuring gold-toned plating, circular floral motifs studded with clear CZ stones, and green accent stones, mounted on a black bust display.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Jewellery-Sets",
+      "mediaId": "3825514549173516151",
+      "groupName": "group_3825514549173516151",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3825514549173516151\\the_girl_ho_se_Timeless_elegance,_woven_with_tradition_✨_Dm_for_price_detai_2026-02-05_DUW9TbKk3d3_3825514549173516151.jpg"
+      ],
+      "product": {
+        "name": "Traditional Antique Gold Plated Temple Necklace Set with Jhumkas",
+        "category": "Jewellery Sets",
+        "description": "Exquisite Indian traditional temple jewellery set featuring an antique gold-toned necklace with a Goddess motif pendant and a pair of matching Jhumka earrings. Decorated with intricate embossing and subtle green stone accents, perfect for traditional celebrations.",
+        "material": "Alloy",
+        "jewelleryType": "Temple Jewellery Set",
+        "metalPlating": "Antique Gold",
+        "stone": "Emerald",
+        "weight": "",
+        "occasion": "Festive",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image clearly displays a matching set comprising a pendant necklace on a chain and a pair of traditional Jhumka earrings, rendered in an antique gold finish with a divine/temple design motif and green accent stones.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Jewellery-Sets",
+      "mediaId": "3827335567911237210",
+      "groupName": "group_3827335567911237210",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3827335567911237210\\the_girl_ho_se_Wear_your_moments,_wear_your_jewels_🤍🪽_#uniquedesign_#unique_2026-02-07_DUdbWvBkTZa_3827335567911237210.jpg"
+      ],
+      "product": {
+        "name": "Traditional Gold Plated Green Stone and CZ Pendant Necklace Set with Matching Earrings",
+        "category": "Jewellery Sets",
+        "description": "An elegant gold-plated necklace set featuring a slender chain with a delicate teardrop-shaped pendant embedded with a central green stone and surrounding clear CZ stones. Comes complete with a pair of matching stud earrings, ideal for festive and traditional occasions.",
+        "material": "Alloy",
+        "jewelleryType": "Pendant Necklace and Earring Set",
+        "metalPlating": "Gold",
+        "stone": "CZ, Emerald",
+        "weight": "",
+        "occasion": "Festive",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image shows a black velvet display stand holding a gold-plated delicate chain necklace with a small stone-studded pendant and a pair of matching teardrop stud earrings featuring green center stones surrounded by clear stones.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Jewellery-Sets",
+      "mediaId": "3829539586423586893",
+      "groupName": "group_3829539586423586893",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3829539586423586893\\the_girl_ho_se_A_fusion_of_traditional_artistry_and_modern_grace🌞_#Traditio_2026-02-10_DUlQfbOEwBN_3829539586423586893.jpg"
+      ],
+      "product": {
+        "name": "Traditional Gold Plated Namam Motif Necklace and Earrings Set",
+        "category": "Jewellery Sets",
+        "description": "An elegant traditional jewellery set featuring a gold-plated braided chain choker decorated with a central sacred Namam (Tilak) motif and ornate floral starburst charms. Accented with vibrant ruby red, emerald green, and brilliant white stones, it includes matching floral stud earrings perfect for festive and religious celebrations.",
+        "material": "Alloy",
+        "jewelleryType": "Necklace Set",
+        "metalPlating": "Gold",
+        "stone": "Ruby, Emerald, CZ",
+        "weight": "",
+        "occasion": "Traditional",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image clearly shows a matching jewellery set consisting of a gold-finish choker necklace featuring a central Tilak/Namam symbol with stone-studded floral motifs, along with pair of matching stud earrings.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Jewellery-Sets",
+      "mediaId": "3830243936070374360",
+      "groupName": "group_3830243936070374360",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3830243936070374360\\the_girl_ho_se_Adorned_with_moments,_shining_bright_🪩🪽_#jewelcollections_#j_2026-02-11_DUnwpD8kZPY_3830243936070374360.jpg"
+      ],
+      "product": {
+        "name": "Elegant Leaf Motif Gold Plated CZ Necklace Set",
+        "category": "Jewellery Sets",
+        "description": "An elegant gold-plated jewellery set featuring a delicate leaf-patterned necklace embellished with clear CZ stones, paired with matching leaf-designed drop earrings.",
+        "material": "Alloy",
+        "jewelleryType": "Necklace and Earring Set",
+        "metalPlating": "Gold",
+        "stone": "CZ",
+        "weight": "",
+        "occasion": "Party",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image clearly displays a matching jewellery set consisting of a leaf-link pattern necklace studded with small clear CZ stones along with a pair of matching drop earrings.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Jewellery-Sets",
+      "mediaId": "3832470317898636576",
+      "groupName": "group_3832470317898636576",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3832470317898636576\\the_girl_ho_se_Grace_in_every_feather,_royalty_in_every_detail🦚🤍_#jewelobse_2026-02-14_DUvq3Lmk50g_3832470317898636576.jpg"
+      ],
+      "product": {
+        "name": "Traditional Gold Plated CZ and Stone Studded Pendant Necklace Set with Earrings",
+        "category": "Jewellery Sets",
+        "description": "An elegant gold-plated pendant necklace set featuring a round peacock floral-inspired pendant embellished with clear CZ stones, ruby-red, and emerald-green accent stones. Accompanied by a pair of matching stud earrings to complete your traditional ensemble.",
+        "material": "Alloy",
+        "jewelleryType": "Pendant Necklace Set",
+        "metalPlating": "Gold",
+        "stone": "CZ, Ruby, Emerald",
+        "weight": "",
+        "occasion": "Festive",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image clearly shows a gold-toned chain necklace featuring a circular pendant set with white CZ, pink/ruby, and green stones, paired with matching stud earrings displayed on a mannequin bust.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Jewellery-Sets",
+      "mediaId": "3833096628727826625",
+      "groupName": "group_3833096628727826625",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3833096628727826625\\the_girl_ho_se_Lakshmi's_grace,_in_every_sparkle_✨_#LakshmiJewels_#jewelobs_2026-02-15_DUx5RNBEcjB_3833096628727826625.jpg"
+      ],
+      "product": {
+        "name": "Traditional Gold Plated Temple CZ Necklace Set",
+        "category": "Jewellery Sets",
+        "description": "An elegant traditional gold-plated necklace set featuring sparkling floral CZ stone clusters combined with small gold-toned deity motifs along the chain. Includes a matching pair of earrings designed with deity accents and floral CZ drops, suitable for traditional and festive wear.",
+        "material": "Alloy",
+        "jewelleryType": "Necklace Set",
+        "metalPlating": "Gold",
+        "stone": "CZ",
+        "weight": "",
+        "occasion": "Traditional",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The display shows a matching set containing a necklace and a pair of earrings featuring gold-plated metal, clear star/flower-shaped CZ stones, and small traditional temple motifs.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Jewellery-Sets",
+      "mediaId": "3834592816077557669",
+      "groupName": "group_3834592816077557669",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3834592816077557669\\the_girl_ho_se_Own_the_glow,_Shop_our_latest_traditional_collection_🌞🦚_#Gol_2026-02-17_DU3NdmEkU-l_3834592816077557669.jpg"
+      ],
+      "product": {
+        "name": "Traditional Antique Gold Plated Peacock Motif Necklace Set",
+        "category": "Jewellery Sets",
+        "description": "Exquisite Indian traditional antique gold-plated necklace set featuring detailed peacock elements and circular drop medallions encrusted with synthetic ruby, emerald, and clear stones. Comes complete with a pair of matching drop earrings.",
+        "material": "Alloy",
+        "jewelleryType": "Necklace Set",
+        "metalPlating": "Antique Gold",
+        "stone": "CZ, Ruby, Emerald",
+        "weight": "",
+        "occasion": "Traditional",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The panels show a complete jewellery set containing a necklace and matching pair of earrings adorned with peacock motifs and red, green, and white stones set in an antique gold finish.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Jewellery-Sets",
+      "mediaId": "3835346825235343377",
+      "groupName": "group_3835346825235343377",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3835346825235343377\\the_girl_ho_se_Timeless_elegance_in_every_link._Embracing_the_divine_beauty_2026-02-18_DU54530kygR_3835346825235343377.jpg"
+      ],
+      "product": {
+        "name": "Traditional Antique Gold Temple Jewellery Set with Laxmi Pendant and Jhumkas",
+        "category": "Jewellery Sets",
+        "description": "An exquisite antique gold-plated temple jewellery set featuring a long chain with an intricately carved Goddess Laxmi pendant. Detailed with pink and green accent stones and dangling white pearl drops, it comes paired with matching jhumka earrings.",
+        "material": "Alloy",
+        "jewelleryType": "Temple Jewellery Set",
+        "metalPlating": "Antique Gold",
+        "stone": "Pearl, Ruby, Emerald",
+        "weight": "",
+        "occasion": "Traditional",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image clearly shows a complete jewellery set consisting of a long gold-tone necklace featuring a traditional Goddess Laxmi temple pendant adorned with red, green stones, and pearl drops, along with matching jhumka style earrings.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Jewellery-Sets",
+      "mediaId": "3837505353282561206",
+      "groupName": "group_3837505353282561206",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3837505353282561206\\the_girl_ho_se_Carrying_a_piece_of_heritage_in_every_detail._Classic_gold,_2026-02-21_DVBjsluESS2_3837505353282561206.jpg"
+      ],
+      "product": {
+        "name": "Traditional Gold Plated Temple Pendant Necklace Set with Pearls",
+        "category": "Jewellery Sets",
+        "description": "An elegant traditional temple jewellery set featuring a delicate gold-toned chain with a detailed Lakshmi motif pendant. The set is embellished with red and green accent stones and dangling white pearls, complete with a pair of matching earrings.",
+        "material": "Alloy, Synthetic Pearls, Beads",
+        "jewelleryType": "Temple Jewellery Set",
+        "metalPlating": "Antique Gold",
+        "stone": "Pearl, Ruby",
+        "weight": "",
+        "occasion": "Traditional",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image shows a matching necklace and earring set displayed on a jewellery bust. The design features traditional temple artwork with gold finish, pearl drops, and red/green stones.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Jewellery-Sets",
+      "mediaId": "3839671547124576733",
+      "groupName": "group_3839671547124576733",
+      "imageCount": 2,
+      "images": [
+        "Jewellery-Sets\\group_3839671547124576733\\the_girl_ho_se_Capturing_the_soul_of_tradition_in_every_intricate_detail_🦋✨_2026-02-24_DVJQO28iPHd_3839671547124576733.jpg",
+        "Jewellery-Sets\\group_3839671547124576733\\the_girl_ho_se_Capturing_the_soul_of_tradition_in_every_intricate_detail_🦋✨_2026-02-24_DVJQO28iPHd_3839671547124576733_2.jpg"
+      ],
+      "product": {
+        "name": "Antique Gold Temple Lakshmi Necklace Set with Jhumkas",
+        "category": "Jewellery Sets",
+        "description": "An exquisite traditional temple jewellery set featuring a intricately detailed Goddess Lakshmi pendant necklace and matching jhumka earrings. Finished in antique gold plating, decorated with synthetic ruby red stones and hanging gold metal beads.",
+        "material": "Alloy",
+        "jewelleryType": "Temple Necklace Set",
+        "metalPlating": "Antique Gold",
+        "stone": "Ruby",
+        "weight": "",
+        "occasion": "Festive",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The visual evidence shows an antique gold-plated temple necklace centered around a Goddess Lakshmi motif pendant with red stones, accompanied by a matching pair of Lakshmi motif Jhumka earrings.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 2
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Jewellery-Sets",
+      "mediaId": "3840428567709313844",
+      "groupName": "group_3840428567709313844",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3840428567709313844\\the_girl_ho_se_Timeless_elegance_meets_modern_grace._A_touch_of_emerald_and_2026-02-25_DVL8W9Tk2s0_3840428567709313844.jpg"
+      ],
+      "product": {
+        "name": "Traditional Antique Gold Plated Green Stone Leaf Motif Necklace Set",
+        "category": "Jewellery Sets",
+        "description": "Enhance your traditional look with this elegant antique gold-plated necklace set featuring leaf-shaped motifs studded with green stones. Complete with a central pendant detail and matching drop earrings embellished with small pearl and gold bead hangings, this set adds a classic charm to any festive attire.",
+        "material": "Alloy",
+        "jewelleryType": "Necklace Set",
+        "metalPlating": "Antique Gold",
+        "stone": "Emerald, Pearl",
+        "weight": "",
+        "occasion": "Traditional",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image displays a matching necklace and pair of earrings on a jewelry bust. The pieces feature antique gold plating, leaf motifs set with green stones, and pearl bead hanging accents.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Jewellery-Sets",
+      "mediaId": "3841826841288012576",
+      "groupName": "group_3841826841288012576",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3841826841288012576\\the_girl_ho_se_Sparkle_that_speaks_louder_than_words._#jewelcollections_#je_2026-02-27_DVQ6ShDiHMg_3841826841288012576.jpg"
+      ],
+      "product": {
+        "name": "Gold Plated CZ Studded Floral Pendant Chain Necklace Set with Earrings",
+        "category": "Jewellery Sets",
+        "description": "An elegant gold-plated jewellery set featuring a starburst floral pendant studded with sparkling CZ stones on a refined chain, paired with matching drop earrings. Perfect for adding a touch of sophisticated shimmer to festive, party, or traditional attire.",
+        "material": "Metal Alloy",
+        "jewelleryType": "Pendant Necklace Set",
+        "metalPlating": "Gold",
+        "stone": "CZ",
+        "weight": "",
+        "occasion": "Festive",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image clearly displays a matching necklace and earring set featuring a gold-toned chain with a starburst/floral CZ pendant and identical earrings displayed on a mannequin bust.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Jewellery-Sets",
+      "mediaId": "3845087140594806667",
+      "groupName": "group_3845087140594806667",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3845087140594806667\\the_girl_ho_se_Like_stars_caught_in_a_golden_web_✨_#jewelhub_#jewelattracti_2026-03-04_DVcfmHZk2-L_3845087140594806667.jpg"
+      ],
+      "product": {
+        "name": "Gold Plated Crescent Motif Kundan Necklace Set",
+        "category": "Jewellery Sets",
+        "description": "An exquisite traditional jewellery set featuring a necklace adorned with repeating crescent motifs studded with clear Kundan stones, paired with matching crescent floral earrings.",
+        "material": "Alloy",
+        "jewelleryType": "Necklace Set",
+        "metalPlating": "Gold",
+        "stone": "Kundan",
+        "weight": "",
+        "occasion": "Festive",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image clearly displays a matching set comprising a necklace with linked crescent (chand) motifs and a pair of matching earrings with floral and crescent designs set with Kundan/Polki stones on gold plating.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Jewellery-Sets",
+      "mediaId": "3846529697677782265",
+      "groupName": "group_3846529697677782265",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3846529697677782265\\the_girl_ho_se_Classic._Gold._Bold._A_masterpiece_designed_to_make_every_mo_2026-03-06_DVhnmFYEyz5_3846529697677782265.jpg"
+      ],
+      "product": {
+        "name": "Traditional Antique Gold Plated Temple Jewellery Set with Jhumkas",
+        "category": "Jewellery Sets",
+        "description": "An exquisite Indian traditional long necklace set featuring a intricately crafted round mandala-style pendant adorned with a central red stone accent and pearl drops. Comes with a pair of matching peacock motif jhumka earrings, perfect for grand festivities and wedding occasions.",
+        "material": "Alloy",
+        "jewelleryType": "Necklace Set",
+        "metalPlating": "Antique Gold",
+        "stone": "Pearl, Ruby",
+        "weight": "",
+        "occasion": "Traditional",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image clearly shows a matching long chain necklace set featuring a large circular antique gold-finished temple pendant with pearl droplets and a red central stone, paired with matching peacock jhumka earrings.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Jewellery-Sets",
+      "mediaId": "3847654315645798705",
+      "groupName": "group_3847654315645798705",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3847654315645798705\\the_girl_ho_se_There’s_something_about_the_combination_of_gold,_deep_emeral_2026-03-07_DVlnTbekQkx_3847654315645798705.jpg"
+      ],
+      "product": {
+        "name": "Traditional Gold Plated Pendant Necklace Set with Earrings",
+        "category": "Jewellery Sets",
+        "description": "An elegant traditional jewellery set featuring a sleek gold-plated chain with a intricately designed pendant set with green, red, and white stones finished with pearl hanging cluster drops. The set includes a matching pair of drop earrings.",
+        "material": "Alloy",
+        "jewelleryType": "Necklace Set",
+        "metalPlating": "Gold",
+        "stone": "Pearl, CZ, Emerald, Ruby",
+        "weight": "",
+        "occasion": "Festive",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "Visual evidence shows a necklace with a central drop pendant and matching earrings displayed on a black neck mannequin. The set displays gold plating with green, red, white stones, and pearl drop embellishments.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": true,
+      "category": "Jewellery-Sets",
+      "mediaId": "3849119215660425764",
+      "groupName": "group_3849119215660425764",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3849119215660425764\\the_girl_ho_se_Small_details,_significant_impact._The_perfect_touch_of_spar_2026-03-09_DVq0Yh7keIk_3849119215660425764.jpg"
+      ],
+      "product": {
+        "name": "Gold-Plated Delicate Floral CZ Pendant Necklace",
+        "category": "Necklaces",
+        "description": "An elegant and minimalist gold-plated chain necklace features a subtle floral central motif adorned with shimmering clear CZ stones. Perfect for daily wear or understated party styling.",
+        "material": "Alloy",
+        "jewelleryType": "Pendant Necklace",
+        "metalPlating": "Gold",
+        "stone": "CZ",
+        "weight": "",
+        "occasion": "Casual",
+        "countryOfOrigin": "India",
+        "confidence": 0.95,
+        "reasoning": "The image displays a sleek gold-plated chain with a central floral stone motif attached, displayed on a black velvet necklace mannequin.",
+        "source": {
+          "model": "gemini-3.6-flash",
+          "imagesAnalyzed": 1
+        }
+      },
+      "imported": false
+    },
+    {
+      "success": false,
+      "category": "Jewellery-Sets",
+      "mediaId": "3850562945512732015",
+      "groupName": "group_3850562945512732015",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3850562945512732015\\the_girl_ho_se_Adding_a_touch_of_temple_gold_to_the_festivities._💛_#jewelob_2026-03-11_DVv8pkIkXVv_3850562945512732015.jpg"
+      ],
+      "error": "Gemini is temporarily unavailable after 3 attempts. Please try again in a moment.",
+      "imported": false
+    },
+    {
+      "success": false,
+      "category": "Jewellery-Sets",
+      "mediaId": "3854173657803874810",
+      "groupName": "group_3854173657803874810",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3854173657803874810\\the_girl_ho_se_Bringing_a_touch_of_temple_tradition_to_the_modern_celebrati_2026-03-16_DV8xoWAEWH6_3854173657803874810.jpg"
+      ],
+      "error": "Gemini is temporarily unavailable after 3 attempts. Please try again in a moment.",
+      "imported": false
+    },
+    {
+      "success": false,
+      "category": "Jewellery-Sets",
+      "mediaId": "3854898874230601396",
+      "groupName": "group_3854898874230601396",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3854898874230601396\\the_girl_ho_se_Radiance,_Redefined._🌝🤍_#jewelry_#jewelleryhub_#trendycollec_2026-03-17_DV_WhobkXa0_3854898874230601396.jpg"
+      ],
+      "error": "Gemini is temporarily unavailable after 3 attempts. Please try again in a moment.",
+      "imported": false
+    },
+    {
+      "success": false,
+      "category": "Jewellery-Sets",
+      "mediaId": "3872342672888028955",
+      "groupName": "group_3872342672888028955",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3872342672888028955\\the_girl_ho_se_❤️🪷_#newcollection_#fyp_#thegirlho_se💗_#minimaljewellery_#tr_2026-04-10_DW9UyT6E98b_3872342672888028955.jpg"
+      ],
+      "error": "Gemini is temporarily unavailable after 3 attempts. Please try again in a moment.",
+      "imported": false
+    },
+    {
+      "success": false,
+      "category": "Jewellery-Sets",
+      "mediaId": "3880240779508152826",
+      "groupName": "group_3880240779508152826",
+      "imageCount": 5,
+      "images": [
+        "Jewellery-Sets\\group_3880240779508152826\\the_girl_ho_se_Unseen,_but_never_unlinked🤌🏼🤍_#instagram_#thegirlho_se💗_#sty_2026-04-21_DXZYm45kXn6_3880240779508152826.jpg",
+        "Jewellery-Sets\\group_3880240779508152826\\the_girl_ho_se_Unseen,_but_never_unlinked🤌🏼🤍_#instagram_#thegirlho_se💗_#sty_2026-04-21_DXZYm45kXn6_3880240779508152826_2.jpg",
+        "Jewellery-Sets\\group_3880240779508152826\\the_girl_ho_se_Unseen,_but_never_unlinked🤌🏼🤍_#instagram_#thegirlho_se💗_#sty_2026-04-21_DXZYm45kXn6_3880240779508152826_3.jpg",
+        "Jewellery-Sets\\group_3880240779508152826\\the_girl_ho_se_Unseen,_but_never_unlinked🤌🏼🤍_#instagram_#thegirlho_se💗_#sty_2026-04-21_DXZYm45kXn6_3880240779508152826_4.jpg",
+        "Jewellery-Sets\\group_3880240779508152826\\the_girl_ho_se_Unseen,_but_never_unlinked🤌🏼🤍_#instagram_#thegirlho_se💗_#sty_2026-04-21_DXZYm45kXn6_3880240779508152826_5.jpg"
+      ],
+      "error": "Gemini is temporarily unavailable after 3 attempts. Please try again in a moment.",
+      "imported": false
+    },
+    {
+      "success": false,
+      "category": "Jewellery-Sets",
+      "mediaId": "3892581269779875404",
+      "groupName": "group_3892581269779875404",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3892581269779875404\\the_girl_ho_se_Classic_red,_timeless_gold,_and_the_soft_glow_of_pearls._DM_2026-05-08_DYFOgqEkYZM_3892581269779875404.jpg"
+      ],
+      "error": "Gemini is temporarily unavailable after 3 attempts. Please try again in a moment.",
+      "imported": false
+    },
+    {
+      "success": false,
+      "category": "Jewellery-Sets",
+      "mediaId": "3911037588429236754",
+      "groupName": "group_3911037588429236754",
+      "imageCount": 1,
+      "images": [
+        "Jewellery-Sets\\group_3911037588429236754\\the_girl_ho_se_Simplicity_speaks_volumes._✨_Discover_the_perfect_blend_of_m_2026-06-03_DZGy_cRhmoS_3911037588429236754.jpg"
+      ],
+      "error": "Gemini is temporarily unavailable after 3 attempts. Please try again in a moment.",
+      "imported": false
+    },
+    {
+      "success": false,
+      "category": "Chains",
+      "mediaId": "3826640876312197141",
+      "groupName": "group_3826640876312197141",
+      "imageCount": 1,
+      "images": [
+        "Chains\\group_3826640876312197141\\the_girl_ho_se_Invisible_chains_just_starts_at_89_-_only💗_Shine_Bright🤍🌛_#j_2026-02-06_DUa9ZpDk_gV_3826640876312197141.jpg"
+      ],
+      "error": "Gemini is temporarily unavailable after 3 attempts. Please try again in a moment.",
+      "imported": false
+    },
+    {
+      "success": false,
+      "category": "Chains",
+      "mediaId": "3857069509379722097",
+      "groupName": "group_3857069509379722097",
+      "imageCount": 1,
+      "images": [
+        "Chains\\group_3857069509379722097\\the_girl_ho_se_Long_chain_for_kids🌷_#jewelobsession_#kidsfashion_#jewellery_2026-03-20_DWHEEh8kYtx_3857069509379722097.jpg"
+      ],
+      "error": "Gemini is temporarily unavailable after 3 attempts. Please try again in a moment.",
+      "imported": false
+    },
+    {
+      "success": false,
+      "category": "Chains",
+      "mediaId": "3876648705865147916",
+      "groupName": "group_3876648705865147916",
+      "imageCount": 4,
+      "images": [
+        "Chains\\group_3876648705865147916\\the_girl_ho_se_Invisible_chains_just_99_-_only✨_#insta_#chainsmokers_#thegi_2026-04-16_DXMn3VoEeYM_3876648705865147916.jpg",
+        "Chains\\group_3876648705865147916\\the_girl_ho_se_Invisible_chains_just_99_-_only✨_#insta_#chainsmokers_#thegi_2026-04-16_DXMn3VoEeYM_3876648705865147916_2.jpg",
+        "Chains\\group_3876648705865147916\\the_girl_ho_se_Invisible_chains_just_99_-_only✨_#insta_#chainsmokers_#thegi_2026-04-16_DXMn3VoEeYM_3876648705865147916_3.jpg",
+        "Chains\\group_3876648705865147916\\the_girl_ho_se_Invisible_chains_just_99_-_only✨_#insta_#chainsmokers_#thegi_2026-04-16_DXMn3VoEeYM_3876648705865147916_4.jpg"
+      ],
+      "error": "Gemini is temporarily unavailable after 3 attempts. Please try again in a moment.",
+      "imported": false
+    },
+    {
+      "success": false,
+      "category": "Earrings",
+      "mediaId": "3869356125284583445",
+      "groupName": "group_3869356125284583445",
+      "imageCount": 4,
+      "images": [
+        "Earrings\\group_3869356125284583445\\the_girl_ho_se_🦚💗_Dm📥_for_get_price_details_#fyp_#trending_#jewelry_#asthet_2026-04-06_DWytuUtEcgV_3869356125284583445.jpg",
+        "Earrings\\group_3869356125284583445\\the_girl_ho_se_🦚💗_Dm📥_for_get_price_details_#fyp_#trending_#jewelry_#asthet_2026-04-06_DWytuUtEcgV_3869356125284583445_2.jpg",
+        "Earrings\\group_3869356125284583445\\the_girl_ho_se_🦚💗_Dm📥_for_get_price_details_#fyp_#trending_#jewelry_#asthet_2026-04-06_DWytuUtEcgV_3869356125284583445_3.jpg",
+        "Earrings\\group_3869356125284583445\\the_girl_ho_se_🦚💗_Dm📥_for_get_price_details_#fyp_#trending_#jewelry_#asthet_2026-04-06_DWytuUtEcgV_3869356125284583445_4.jpg"
+      ],
+      "error": "Gemini is temporarily unavailable after 3 attempts. Please try again in a moment.",
+      "imported": false
+    }
+  ]
+}

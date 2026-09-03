@@ -1,13 +1,19 @@
-import fs from "fs";
+﻿import fs from "fs";
 import path from "path";
+import dotenv from "dotenv";
+
+import connectDB from "../../config/db.js";
+import Product from "../../models/Product.js";
+import Category from "../../models/Category.js";
+import Collection from "../../models/Collection.js";
+
+dotenv.config();
 
 // ==========================================
 // CONFIG
 // ==========================================
 
 const PROJECT_ROOT = process.cwd();
-
-const CATALOG_ROOT = PROJECT_ROOT;
 
 const MANIFEST_PATH = path.join(
   PROJECT_ROOT,
@@ -25,41 +31,24 @@ const CATEGORY_FOLDERS = [
   "Accessories",
 ];
 
-const IMAGE_EXTENSIONS = [
-  ".jpg",
-  ".jpeg",
-  ".png",
-  ".webp",
-];
+// ==========================================
+// CATEGORY NORMALIZATION
+// ==========================================
 
-const VIDEO_EXTENSIONS = [
-  ".mp4",
-  ".mov",
-  ".m4v",
-];
+const CATEGORY_MAP = {
+  "Necklaces": "Necklaces",
+  "Jewellery-Sets": "Jewellery Sets",
+  "Chains": "Chains",
+  "Bracelets": "Bracelets",
+  "Earrings": "Earrings",
+  "Rings": "Rings",
+  "Pendants": "Pendants",
+  "Accessories": "Accessories",
+};
 
 // ==========================================
 // HELPERS
 // ==========================================
-
-function isImage(filename) {
-  return IMAGE_EXTENSIONS.includes(
-    path.extname(filename).toLowerCase()
-  );
-}
-
-function isVideo(filename) {
-  return VIDEO_EXTENSIONS.includes(
-    path.extname(filename).toLowerCase()
-  );
-}
-
-function getCategoryFolder(category) {
-  return path.join(
-    CATALOG_ROOT,
-    category
-  );
-}
 
 function getAllFiles(directory) {
   if (!fs.existsSync(directory)) {
@@ -68,14 +57,9 @@ function getAllFiles(directory) {
 
   const results = [];
 
-  for (
-    const entry of fs.readdirSync(
-      directory,
-      {
-        withFileTypes: true,
-      }
-    )
-  ) {
+  for (const entry of fs.readdirSync(directory, {
+    withFileTypes: true,
+  })) {
     const fullPath = path.join(
       directory,
       entry.name
@@ -93,29 +77,19 @@ function getAllFiles(directory) {
   return results;
 }
 
-// ==========================================
-// LOAD MANIFEST
-// ==========================================
-
 function loadManifest() {
-  if (
-    !fs.existsSync(
-      MANIFEST_PATH
-    )
-  ) {
+  if (!fs.existsSync(MANIFEST_PATH)) {
     throw new Error(
       `Manifest not found:\n${MANIFEST_PATH}`
     );
   }
 
-  const content =
-    fs.readFileSync(
-      MANIFEST_PATH,
-      "utf8"
-    );
+  const content = fs.readFileSync(
+    MANIFEST_PATH,
+    "utf8"
+  );
 
-  const manifest =
-    JSON.parse(content);
+  const manifest = JSON.parse(content);
 
   if (!Array.isArray(manifest)) {
     throw new Error(
@@ -126,75 +100,53 @@ function loadManifest() {
   return manifest;
 }
 
+function slugify(value) {
+  return String(value)
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 // ==========================================
-// BUILD LOCAL CATALOG
+// BUILD CATALOG
 // ==========================================
 
 function buildCatalog() {
-  const manifest =
-    loadManifest();
+  const manifest = loadManifest();
 
   const catalog = [];
 
-  for (
-    const category of CATEGORY_FOLDERS
-  ) {
-    const categoryPath =
-      getCategoryFolder(
-        category
-      );
+  for (const categoryFolder of CATEGORY_FOLDERS) {
+    const categoryPath = path.join(
+      PROJECT_ROOT,
+      categoryFolder
+    );
 
-    if (
-      !fs.existsSync(
-        categoryPath
-      )
-    ) {
+    if (!fs.existsSync(categoryPath)) {
       console.warn(
-        `⚠️ Category folder missing: ${category}`
+        `Category folder missing: ${categoryFolder}`
       );
-
       continue;
     }
 
-    const groupDirectories =
-      fs
-        .readdirSync(
-          categoryPath,
-          {
-            withFileTypes: true,
-          }
-        )
-        .filter(
-          (entry) =>
-            entry.isDirectory() &&
-            entry.name.startsWith(
-              "group_"
-            )
-        );
+    const groupDirectories = fs
+      .readdirSync(categoryPath, {
+        withFileTypes: true,
+      })
+      .filter(
+        (entry) =>
+          entry.isDirectory() &&
+          entry.name.startsWith("group_")
+      );
 
-    for (
-      const groupDirectory of groupDirectories
-    ) {
-      const groupPath =
-        path.join(
-          categoryPath,
-          groupDirectory.name
-        );
+    for (const groupDirectory of groupDirectories) {
+      const groupPath = path.join(
+        categoryPath,
+        groupDirectory.name
+      );
 
-      const groupFiles =
-        getAllFiles(
-          groupPath
-        );
-
-      const images =
-        groupFiles.filter(
-          isImage
-        );
-
-      const videos =
-        groupFiles.filter(
-          isVideo
-        );
+      const files = getAllFiles(groupPath);
 
       const mediaId =
         groupDirectory.name.replace(
@@ -202,42 +154,31 @@ function buildCatalog() {
           ""
         );
 
-      const manifestEntry =
-        manifest.find(
-          (item) =>
-            String(
-              item.media_id
-            ) ===
-            String(
-              mediaId
-            )
-        );
+      const manifestEntry = manifest.find(
+        (item) =>
+          String(item.media_id) ===
+          String(mediaId)
+      );
 
       catalog.push({
         mediaId,
 
-        category,
+        sourceCategory:
+          categoryFolder,
+
+        category:
+          CATEGORY_MAP[categoryFolder] ||
+          categoryFolder,
 
         groupDirectory:
           groupDirectory.name,
 
         groupPath,
 
-        images,
+        files,
 
-        videos,
-
-        imageCount:
-          images.length,
-
-        videoCount:
-          videos.length,
-
-        totalMedia:
-          images.length +
-          videos.length,
-
-        captionPrefix:
+        caption:
+          manifestEntry?.caption ||
           manifestEntry?.caption_prefix ||
           "",
 
@@ -252,257 +193,383 @@ function buildCatalog() {
 }
 
 // ==========================================
-// SUMMARY
+// CATEGORY IMPORT
 // ==========================================
 
-function printSummary(
-  catalog
-) {
-  const totalGroups =
-    catalog.length;
+async function ensureCategories(catalog) {
+  const uniqueCategories = [
+    ...new Set(
+      catalog.map(
+        (item) => item.category
+      )
+    ),
+  ];
 
-  const totalImages =
-    catalog.reduce(
-      (
-        total,
-        group
-      ) =>
-        total +
-        group.imageCount,
-      0
-    );
-
-  const totalVideos =
-    catalog.reduce(
-      (
-        total,
-        group
-      ) =>
-        total +
-        group.videoCount,
-      0
-    );
+  let created = 0;
+  let existing = 0;
 
   console.log("");
-
+  console.log(
+    "=========================================="
+  );
+  console.log(
+    " Categories"
+  );
   console.log(
     "=========================================="
   );
 
-  console.log(
-    " Instagram Catalog Dry Run"
-  );
+  for (const name of uniqueCategories) {
+    const slug = slugify(name);
 
-  console.log(
-    "=========================================="
-  );
+    const found =
+      await Category.findOne({
+        slug,
+      });
 
-  console.log("");
+    if (found) {
+      existing++;
 
-  console.log(
-    "Project:",
-    PROJECT_ROOT
-  );
-
-  console.log(
-    "Manifest:",
-    MANIFEST_PATH
-  );
-
-  console.log("");
-
-  console.log(
-    "Product groups:",
-    totalGroups
-  );
-
-  console.log(
-    "Images:",
-    totalImages
-  );
-
-  console.log(
-    "Videos:",
-    totalVideos
-  );
-
-  console.log("");
-
-  console.log(
-    "=========================================="
-  );
-
-  console.log(
-    " Category Summary"
-  );
-
-  console.log(
-    "=========================================="
-  );
-
-  console.log("");
-
-  for (
-    const category of CATEGORY_FOLDERS
-  ) {
-    const categoryGroups =
-      catalog.filter(
-        (group) =>
-          group.category ===
-          category
+      console.log(
+        `Already exists: ${name}`
       );
 
-    const images =
-      categoryGroups.reduce(
-        (
-          total,
-          group
-        ) =>
-          total +
-          group.imageCount,
-        0
-      );
+      continue;
+    }
 
-    const videos =
-      categoryGroups.reduce(
-        (
-          total,
-          group
-        ) =>
-          total +
-          group.videoCount,
-        0
-      );
+    await Category.create({
+      name,
+      slug,
+      description: "",
+      image: "",
+      isActive: true,
+    });
+
+    created++;
 
     console.log(
-      `${category.padEnd(
-        18,
-        " "
-      )} | ${String(
-        categoryGroups.length
-      ).padStart(
-        2,
-        " "
-      )} groups | ${String(
-        images
-      ).padStart(
-        2,
-        " "
-      )} images | ${String(
-        videos
-      ).padStart(
-        2,
-        " "
-      )} videos`
+      `Created category: ${name}`
     );
   }
 
-  console.log("");
+  return {
+    created,
+    existing,
+  };
+}
+
+// ==========================================
+// COLLECTION
+// ==========================================
+
+async function ensureCollection() {
+  const name = "Instagram Import";
+  const slug = "instagram-import";
+
+  let collection =
+    await Collection.findOne({
+      slug,
+    });
+
+  if (collection) {
+    return collection;
+  }
+
+  collection =
+    await Collection.create({
+      name,
+      slug,
+      description:
+        "Products imported from the Instagram catalog.",
+      image: "",
+      isActive: true,
+    });
 
   console.log(
-    "=========================================="
+    `Created collection: ${name}`
   );
 
-  console.log(
-    " Product Groups"
-  );
+  return collection;
+}
 
-  console.log(
-    "=========================================="
-  );
+// ==========================================
+// PRODUCT NAME
+// ==========================================
 
-  console.log("");
+function createProductName(item) {
+  if (item.caption) {
+    const cleanCaption =
+      String(item.caption)
+        .replace(/\s+/g, " ")
+        .trim();
 
-  catalog.forEach(
-    (
-      group,
-      index
-    ) => {
-      console.log(
-        `#${String(
-          index + 1
-        ).padStart(
-          3,
-          "0"
-        )} | ${group.category.padEnd(
-          16,
-          " "
-        )} | ID: ${
-          group.mediaId
-        } | ${
-          group.imageCount
-        } images | ${
-          group.videoCount
-        } videos`
+    if (cleanCaption.length > 0) {
+      return cleanCaption.slice(
+        0,
+        150
       );
     }
-  );
+  }
+
+  return `${item.category} Product ${item.mediaId}`;
+}
+
+// ==========================================
+// PRODUCT IMPORT
+// ==========================================
+
+async function importProducts(catalog) {
+  let imported = 0;
+  let skipped = 0;
+  let failed = 0;
+
+  const collection =
+    await ensureCollection();
 
   console.log("");
-
+  console.log(
+    "=========================================="
+  );
+  console.log(
+    " Importing Products"
+  );
   console.log(
     "=========================================="
   );
 
-  console.log(
-    " DRY RUN ONLY"
-  );
+  for (
+    let index = 0;
+    index < catalog.length;
+    index++
+  ) {
+    const item = catalog[index];
 
-  console.log(
-    "=========================================="
-  );
+    try {
+      const productName =
+        createProductName(item);
 
-  console.log("");
+      // Prevent duplicate import
+      const existing =
+        await Product.findOne({
+          instagramLink:
+            `instagram-import:${item.mediaId}`,
+        });
 
-  console.log(
-    "⚠️ No MongoDB changes were made."
-  );
+      if (existing) {
+        skipped++;
 
-  console.log(
-    "⚠️ No products were created."
-  );
+        console.log(
+          `[${index + 1}/${catalog.length}] SKIPPED | ${productName}`
+        );
 
-  console.log(
-    "⚠️ No media was uploaded."
-  );
+        continue;
+      }
 
-  console.log("");
+      const product = {
+        name: productName,
+
+        description:
+          item.caption ||
+          `Product imported from Instagram catalog under ${item.category}.`,
+
+        category:
+          item.category,
+
+        collections: [collection.name],
+
+        price: 0,
+
+        discountPrice: 0,
+
+        images: [],
+
+        stock: 0,
+
+        featured: false,
+
+        bestSeller: false,
+
+        newArrival: true,
+
+        trending: false,
+
+        instagramLink:
+          `instagram-import:${item.mediaId}`,
+
+        specifications: {
+          material: "",
+          jewelleryType: "",
+          metalPlating: "",
+          stone: "",
+          weight: "",
+          occasion: "",
+          countryOfOrigin: "India",
+        },
+
+        reviews: [],
+
+        numReviews: 0,
+
+        averageRating: 0,
+      };
+
+      await Product.create(product);
+
+      imported++;
+
+      console.log(
+        `[${index + 1}/${catalog.length}] IMPORTED | ${item.category} | ${productName}`
+      );
+    } catch (error) {
+      failed++;
+
+      console.error(
+        `[${index + 1}/${catalog.length}] FAILED | ${item.mediaId}`,
+        error.message
+      );
+    }
+  }
+
+  return {
+    imported,
+    skipped,
+    failed,
+  };
 }
 
 // ==========================================
 // MAIN
 // ==========================================
 
-try {
-  const catalog =
-    buildCatalog();
+async function main() {
+  console.log("");
+  console.log(
+    "=========================================="
+  );
+  console.log(
+    " Instagram Catalog Import"
+  );
+  console.log(
+    "=========================================="
+  );
 
-  if (
-    catalog.length === 0
-  ) {
-    throw new Error(
-      "No Instagram product groups were found."
+  console.log("");
+  console.log(
+    "âš ï¸ PRODUCT DATA ONLY"
+  );
+  console.log(
+    "âš ï¸ Images and videos are NOT uploaded."
+  );
+
+  console.log("");
+
+  try {
+    const catalog =
+      buildCatalog();
+
+    if (catalog.length === 0) {
+      throw new Error(
+        "No Instagram product groups were found."
+      );
+    }
+
+    console.log(
+      `Product groups found: ${catalog.length}`
     );
-  }
 
-  printSummary(
-    catalog
-  );
-} catch (error) {
-  console.error("");
+    // --------------------------------------
+    // DATABASE
+    // --------------------------------------
 
-  console.error(
-    "❌ Instagram catalog dry run failed"
-  );
+    await connectDB();
 
-  console.error("");
+    console.log(
+      "Connected to MongoDB"
+    );
 
-  console.error(
-    error?.message ||
+    // --------------------------------------
+    // CATEGORIES
+    // --------------------------------------
+
+    const categoryResult =
+      await ensureCategories(
+        catalog
+      );
+
+    // --------------------------------------
+    // PRODUCTS
+    // --------------------------------------
+
+    const productResult =
+      await importProducts(
+        catalog
+      );
+
+    // --------------------------------------
+    // FINAL SUMMARY
+    // --------------------------------------
+
+    console.log("");
+    console.log(
+      "=========================================="
+    );
+    console.log(
+      " IMPORT COMPLETED"
+    );
+    console.log(
+      "=========================================="
+    );
+
+    console.log("");
+
+    console.log(
+      `Categories created : ${categoryResult.created}`
+    );
+
+    console.log(
+      `Categories existing: ${categoryResult.existing}`
+    );
+
+    console.log(
+      `Products imported   : ${productResult.imported}`
+    );
+
+    console.log(
+      `Products skipped    : ${productResult.skipped}`
+    );
+
+    console.log(
+      `Products failed     : ${productResult.failed}`
+    );
+
+    console.log("");
+
+    console.log(
+      "Images uploaded     : 0"
+    );
+
+    console.log(
+      "Videos uploaded     : 0"
+    );
+
+    console.log("");
+
+    console.log(
+      "Admin can now verify/edit the imported products."
+    );
+
+    console.log("");
+  } catch (error) {
+    console.error("");
+    console.error(
+      "IMPORT FAILED:"
+    );
+    console.error(
       error
-  );
+    );
 
-  console.error("");
-
-  process.exit(1);
+    process.exitCode = 1;
+  }
 }
+
+main();

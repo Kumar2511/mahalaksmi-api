@@ -6,50 +6,7 @@ import Collection from "../models/Collection.js";
 
 dotenv.config();
 
-const categories = [
-  {
-    name: "Necklaces",
-    slug: "necklaces",
-    description: "Beautiful necklaces for every occasion.",
-    image: "",
-    isActive: true,
-  },
-  {
-    name: "Earrings",
-    slug: "earrings",
-    description: "Elegant earrings for every style.",
-    image: "",
-    isActive: true,
-  },
-  {
-    name: "Rings",
-    slug: "rings",
-    description: "Timeless rings crafted for every occasion.",
-    image: "",
-    isActive: true,
-  },
-  {
-    name: "Bangles",
-    slug: "bangles",
-    description: "Traditional and modern bangles.",
-    image: "",
-    isActive: true,
-  },
-  {
-    name: "Bracelets",
-    slug: "bracelets",
-    description: "Beautiful bracelets for everyday elegance.",
-    image: "",
-    isActive: true,
-  },
-  {
-    name: "Jewellery Sets",
-    slug: "jewellery-sets",
-    description: "Complete jewellery sets for special occasions.",
-    image: "",
-    isActive: true,
-  },
-];
+const categories = [];
 
 // IMPORTANT:
 // Keep this empty for now.

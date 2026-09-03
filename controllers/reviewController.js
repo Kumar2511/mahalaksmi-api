@@ -1,5 +1,30 @@
 import Review from "../models/Review.js";
 import Order from "../models/Order.js";
+import Product from "../models/Product.js";
+
+// Helper to recalculate and update product review stats in MongoDB
+export const updateProductStats = async (productId) => {
+  try {
+    if (!productId) return;
+    const reviews = await Review.find({ product: productId, approved: true });
+    const numReviews = reviews.length;
+    const averageRating =
+      numReviews > 0
+        ? Number(
+            (
+              reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / numReviews
+            ).toFixed(1)
+          )
+        : 0;
+
+    await Product.findByIdAndUpdate(productId, {
+      numReviews,
+      averageRating,
+    });
+  } catch (err) {
+    console.error("Failed to update product review stats:", err);
+  }
+};
 
 // ======================================================
 // Create Review
@@ -472,6 +497,8 @@ export const importReviews = async (req, res) => {
 
         await Review.create(reviewData);
 
+        await updateProductStats(product._id);
+
         imported++;
       } catch (itemError) {
         console.error(
@@ -641,6 +668,8 @@ export const approveReview = async (
       });
     }
 
+    await updateProductStats(review.product);
+
     return res.status(200).json({
       success: true,
       message:
@@ -680,7 +709,11 @@ export const deleteReview = async (
       });
     }
 
+    const productId = review.product;
+
     await review.deleteOne();
+
+    await updateProductStats(productId);
 
     return res.status(200).json({
       success: true,

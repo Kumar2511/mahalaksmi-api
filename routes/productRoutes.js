@@ -6,7 +6,6 @@ import {
   getProduct,
   updateProduct,
   deleteProduct,
-  importDefaultProducts,
   importAiPreviewProducts,
   getFeaturedProducts,
   getBestSellerProducts,
@@ -52,13 +51,6 @@ router.post(
   createProduct
 );
 
-// Import Default Products
-router.post(
-  "/import-default",
-  protect,
-  admin,
-  importDefaultProducts
-);
 
 // ========================================
 // Import AI Preview Products

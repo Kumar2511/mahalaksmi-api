@@ -856,9 +856,7 @@ export const importInstagramProductController =
           ai.category ||
           group.category ||
           "Jewellery",
-        collection:
-          ai.collection ||
-          "AI Imported",
+        collections: [],
         price:
           Number.isFinite(
             Number(ai.price)
@@ -1007,6 +1005,7 @@ console.log("âœ… PRODUCT CREATED:", createdProduct._id);
       });
     }
   };
+
 
 
 

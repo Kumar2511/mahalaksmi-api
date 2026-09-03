@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import PaymentSettings from "../models/PaymentSettings.js";
 import Order from "../models/Order.js";
 
@@ -199,5 +200,62 @@ export const getPayment = async (req, res) => {
       success: false,
       message: error.message,
     });
+  }
+};
+
+// ===================================
+// PAYMENT WEBHOOK (SERVER-SIDE VERIFICATION)
+// ===================================
+export const handlePaymentWebhook = async (req, res) => {
+  try {
+    const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET || process.env.RAZORPAY_KEY_SECRET;
+    const signature = req.headers["x-razorpay-signature"];
+
+    if (webhookSecret && signature) {
+      const shasum = crypto.createHmac("sha256", webhookSecret);
+      shasum.update(JSON.stringify(req.body));
+      const digest = shasum.digest("hex");
+
+      if (digest !== signature) {
+        console.error("Invalid webhook signature!");
+        return res.status(400).json({ success: false, message: "Invalid signature" });
+      }
+    }
+
+    const event = req.body.event;
+    const payload = req.body.payload;
+
+    if (event === "payment.captured" || event === "order.paid") {
+      const paymentEntity = payload?.payment?.entity || payload?.order?.entity;
+      const razorpayOrderId = paymentEntity?.order_id;
+      const razorpayPaymentId = paymentEntity?.id;
+      const notesOrderId = paymentEntity?.notes?.orderId;
+
+      let order = null;
+      if (notesOrderId) {
+        order = await Order.findById(notesOrderId);
+      } else if (razorpayOrderId) {
+        order = await Order.findOne({ razorpayOrderId });
+      }
+
+      if (order) {
+        if (order.paymentStatus !== "Paid") {
+          order.paymentStatus = "Paid";
+          if (order.orderStatus === "Pending") {
+            order.orderStatus = "Confirmed";
+          }
+          if (razorpayPaymentId) {
+            order.razorpayPaymentId = razorpayPaymentId;
+          }
+          await order.save();
+          console.log(`[WEBHOOK SUCCESS] Order ${order._id} marked as PAID`);
+        }
+      }
+    }
+
+    return res.status(200).json({ success: true, status: "ok" });
+  } catch (error) {
+    console.error("Webhook Processing Error:", error);
+    return res.status(500).json({ success: false, message: error.message });
   }
 };

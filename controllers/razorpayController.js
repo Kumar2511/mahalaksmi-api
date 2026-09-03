@@ -248,6 +248,13 @@ export const createOrder = async (req, res) => {
     // Create Razorpay Order
     // ======================================
 
+    if (!razorpay) {
+      return res.status(503).json({
+        success: false,
+        message: "Razorpay payment integration is coming soon. Please use manual UPI payment.",
+      });
+    }
+
     const options = {
       amount: Math.round(
         totalAmount * 100

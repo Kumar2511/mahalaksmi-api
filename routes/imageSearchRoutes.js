@@ -3,26 +3,27 @@ import multer from "multer";
 
 import {
   findProductByImage,
+  searchProductByUrl,
 } from "../controllers/imageSearchController.js";
 
 const router = express.Router();
 
-// ==========================================
-// Multer
-// ==========================================
-
+// Temporary upload directory for temporary visual processing
 const upload = multer({
-  dest: "uploads/",
+  dest: "uploads/temp-search/",
 });
 
-// ==========================================
-// Find Product By Screenshot
-// ==========================================
-
+// Find product by screenshot
 router.post(
   "/",
   upload.single("media"),
   findProductByImage
+);
+
+// Find product by Instagram URL
+router.post(
+  "/url",
+  searchProductByUrl
 );
 
 export default router;

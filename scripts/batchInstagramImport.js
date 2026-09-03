@@ -131,9 +131,7 @@ function buildProductData(ai, group, images) {
       group.category ||
       "Jewellery",
 
-    collection:
-      ai.collection ||
-      "AI Imported",
+    collections: [],
 
     price:
       numberOrZero(ai.price),

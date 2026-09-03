@@ -390,20 +390,77 @@ export async function identifyInstagramProduct(
     });
   }
 
-  // ========================================
-  // GEMINI PROMPT
-  // ========================================
+// ========================================
+// GEMINI PROMPT
+// ========================================
 
-  const prompt = `
-You are an expert jewellery product catalog assistant.
+const prompt = `
+You are an expert jewellery product catalog assistant for an e-commerce website.
 
-Analyze the provided product images carefully.
+Analyze ALL provided images carefully.
 
-These images may show different views of THE SAME jewellery product.
+IMPORTANT:
+- Multiple images may show different views of THE SAME jewellery product.
+- Treat all provided images as ONE product.
+- Do NOT create multiple products from multiple images.
+- Ignore Instagram filenames, media IDs, group IDs, hashtags, captions, and technical filenames when creating the product name.
+- The output must be suitable for a professional jewellery e-commerce website.
 
-Do not treat each image as a separate product.
+PRODUCT NAME RULES:
 
-Identify the jewellery product shown in the images.
+Create a clean, attractive, realistic e-commerce product name.
+
+The name MUST:
+- Describe the actual jewellery visible in the images.
+- Be short and professional.
+- Normally contain 2 to 6 meaningful words.
+- Use jewellery terminology such as:
+  Necklace, Haram, Choker, Jhumka, Earrings, Stud Earrings,
+  Chandbali, Ring, Bracelet, Bangles, Kada, Chain,
+  Pendant, Anklet, Maang Tikka, Jewellery Set, etc.
+- Mention visible design characteristics when useful:
+  Temple, Kundan, Pearl, Floral, Stone Studded, Bridal,
+  Antique, Traditional, Designer, Minimal, Layered, etc.
+- Never use random product numbers.
+- Never use Instagram media IDs.
+- Never use filenames.
+- Never use phrases such as:
+  "Instagram Product",
+  "Product 381650...",
+  "Group 001",
+  "Image Product",
+  "AI Product",
+  "Unknown Product".
+- Do not copy an Instagram caption as the product name.
+- Do not invent a brand name.
+- Do not invent a specific gemstone/material that cannot reasonably be identified.
+- If the exact design is uncertain, use a safe generic jewellery name.
+
+GOOD EXAMPLES:
+
+"Antique Temple Necklace"
+"Pearl Layered Necklace"
+"Traditional Kundan Necklace"
+"Floral Stone Earrings"
+"Classic Jhumka Earrings"
+"Pearl Drop Earrings"
+"Antique Gold Jhumka"
+"Designer Chandbali Earrings"
+"Elegant Kundan Ring"
+"Traditional Temple Bangles"
+"Stone Studded Bracelet"
+"Layered Gold Chain"
+"Temple Jewellery Set"
+"Bridal Necklace Set"
+
+BAD EXAMPLES:
+
+"3816504180358607578"
+"Group 3816504180358607578"
+"Instagram Product"
+"IMG_1234 Product"
+"AI Imported Product"
+"Jewellery Product 01"
 
 Return ONLY valid JSON.
 
@@ -412,10 +469,11 @@ Do not use markdown.
 Do not add explanations outside the JSON.
 
 Use exactly this structure:
+
 {
   "name": "",
   "category": "",
-  "collection": "AI Imported",
+  "collections": [],
   "description": "",
   "price": 0,
   "discountPrice": 0,
@@ -437,7 +495,8 @@ Use exactly this structure:
   "confidence": 0,
   "reasoning": ""
 }
-Rules:
+
+RULES:
 
 1. category must normally be one of:
 
@@ -453,15 +512,15 @@ Rules:
    - Jewellery Sets
    - Other
 
-2. jewelleryType should describe the specific jewellery type.
+2. jewelleryType should describe the specific jewellery type visible.
 
-3. material should describe what can reasonably be determined
+3. material should describe only what can reasonably be determined
    from the images.
 
-   Do not invent exact material if it cannot
-   be visually determined.
+   Do NOT claim real gold, silver, diamond, etc.
+   unless it can reasonably be determined.
 
-4. metalPlating should describe visible plating such as:
+4. metalPlating should describe visible plating when identifiable:
 
    - Gold
    - Silver
@@ -469,9 +528,10 @@ Rules:
    - Oxidized
    - Antique Gold
 
-   If uncertain, use an empty string.
+   If uncertain, return "".
 
-5. stone should mention visible stones such as:
+5. stone should mention visible stones or decorative elements
+   only when reasonably identifiable:
 
    - CZ
    - Pearl
@@ -480,40 +540,69 @@ Rules:
    - Emerald
    - Crystal
 
-   If none can be determined,
-   use an empty string.
+   If uncertain, return "".
 
-6. weight must remain empty unless the weight
-   is explicitly visible or provided in the image.
+6. weight must remain empty unless explicitly visible
+   or provided.
 
-7. occasion can be inferred conservatively
-   from the design, such as:
+7. occasion can be inferred conservatively:
 
+   - Daily Wear
+   - Party Wear
+   - Bridal
    - Wedding
-   - Party
    - Festive
-   - Casual
    - Traditional
+   - Casual
 
-8. description should be suitable for an
-   ecommerce jewellery product page.
+8. description must be suitable for an e-commerce product page.
 
-9. Do NOT invent:
+   Write 1-3 concise sentences describing:
+   - design
+   - visible details
+   - suitable usage
 
-   - brand names
-   - prices
-   - measurements
-   - certifications
-   - technical specifications
+   Do NOT mention Instagram.
+   Do NOT mention AI.
+   Do NOT mention image analysis.
+   Do NOT invent technical specifications.
 
-10. confidence must be a number between 0 and 1.
+9. colors should contain only visibly identifiable colours.
 
-11. reasoning should briefly explain the
-    visual evidence used to identify the product.
+10. sizes should contain only sizes that are actually visible
+    or reasonably provided.
 
-Remember:
+11. price must remain 0 unless an actual price is explicitly
+    visible in the provided images.
 
-The images represent ONE product listing.
+12. discountPrice must remain 0 unless an actual discounted
+    price is explicitly visible.
+
+13. stock must remain 0.
+
+14. featured must remain false.
+
+15. bestSeller must remain false.
+
+16. newArrival should remain true for newly imported products.
+
+17. trending must remain false.
+
+18. instagramLink must remain empty.
+
+19. confidence must be a number from 0 to 1 representing
+    confidence in the product identification.
+
+20. reasoning should briefly explain why the product name
+    and category were selected.
+
+FINAL IMPORTANT RULE:
+
+The "name" field must ALWAYS be a clean human-readable
+e-commerce jewellery product name.
+
+Never return IDs, filenames, Instagram captions,
+group numbers, or technical identifiers as the product name.
 `;
 
   // ========================================
@@ -567,6 +656,7 @@ The images represent ONE product listing.
     },
   };
 }
+
 
 
 

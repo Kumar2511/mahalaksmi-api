@@ -6,14 +6,13 @@ import Collection from "../models/Collection.js";
 // IMPORT EXISTING PRODUCT CATEGORIES & COLLECTIONS
 // =====================================================
 
-export const importExistingCatalog = async (
-  req,
-  res
-) => {
+export const importExistingCatalog = async (req, res) => {
   try {
     // Get existing products
+    // IMPORTANT:
+    // Product collections are now stored in `collections` array.
     const products = await Product.find({})
-      .select("category collection")
+      .select("category collections")
       .lean();
 
     const categoryNames = new Set();
@@ -29,19 +28,19 @@ export const importExistingCatalog = async (
         typeof product.category === "string" &&
         product.category.trim()
       ) {
-        categoryNames.add(
-          product.category.trim()
-        );
+        categoryNames.add(product.category.trim());
       }
 
-      // Collection
-      if (
-        typeof product.collection === "string" &&
-        product.collection.trim()
-      ) {
-        collectionNames.add(
-          product.collection.trim()
-        );
+      // Collections
+      if (Array.isArray(product.collections)) {
+        product.collections.forEach((collection) => {
+          if (
+            typeof collection === "string" &&
+            collection.trim()
+          ) {
+            collectionNames.add(collection.trim());
+          }
+        });
       }
     });
 
@@ -62,13 +61,9 @@ export const importExistingCatalog = async (
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-+|-+$/g, "");
 
-      const existing =
-        await Category.findOne({
-          $or: [
-            { slug },
-            { name },
-          ],
-        });
+      const existing = await Category.findOne({
+        $or: [{ slug }, { name }],
+      });
 
       if (existing) {
         existingCategories++;
@@ -97,13 +92,9 @@ export const importExistingCatalog = async (
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-+|-+$/g, "");
 
-      const existing =
-        await Collection.findOne({
-          $or: [
-            { slug },
-            { name },
-          ],
-        });
+      const existing = await Collection.findOne({
+        $or: [{ slug }, { name }],
+      });
 
       if (existing) {
         existingCollections++;
@@ -128,8 +119,7 @@ export const importExistingCatalog = async (
     return res.status(200).json({
       success: true,
 
-      message:
-        "Existing catalog imported successfully.",
+      message: "Existing catalog imported successfully.",
 
       productsScanned: products.length,
 
@@ -146,15 +136,11 @@ export const importExistingCatalog = async (
       },
     });
   } catch (error) {
-    console.error(
-      "Catalog Import Error:",
-      error
-    );
+    console.error("Catalog Import Error:", error);
 
     return res.status(500).json({
       success: false,
-      message:
-        "Failed to import existing catalog.",
+      message: "Failed to import existing catalog.",
       error: error.message,
     });
   }

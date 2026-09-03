@@ -14,6 +14,7 @@ import couponRoutes from "./routes/couponRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
+import voiceAssistantRoutes from "./routes/voiceAssistantRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import collectionRoutes from "./routes/collectionRoutes.js";
 import catalogImportRoutes from "./routes/catalogImportRoutes.js";
@@ -34,6 +35,8 @@ import authRoutes from "./routes/authRoutes.js";
 import shippingRoutes from "./routes/shippingRoutes.js";
 import taxRoutes from "./routes/taxRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
+import invoiceRoutes from "./routes/invoiceRoutes.js";
+import invoiceSettingsRoutes from "./routes/invoiceSettingsRoutes.js";
 import razorpayRoutes from "./routes/razorpayRoutes.js";
 import subscriberRoutes from "./routes/subscriberRoutes.js";
 import instagramImportRoutes from "./routes/instagramImportRoutes.js";
@@ -96,16 +99,13 @@ connectDB();
 
 const app = express();
 // ==========================================
-// STATIC UPLOADS
+// Serve Uploaded Files
 // ==========================================
 
 app.use(
   "/uploads",
   express.static(
-    path.resolve(
-      process.cwd(),
-      "uploads"
-    )
+    path.join(process.cwd(), "uploads")
   )
 );
 // ==========================================
@@ -169,6 +169,11 @@ app.use(
   productRoutes
 );
 
+app.use(
+  "/api/voice-assistant",
+  voiceAssistantRoutes
+);
+
 // Categories
 app.use(
   "/api/categories",
@@ -193,6 +198,8 @@ app.use(
   orderRoutes
 );
 
+app.use("/api/invoices", invoiceRoutes);
+app.use("/api/admin/invoice-settings", invoiceSettingsRoutes);
 // Stock Notifications
 app.use(
   "/api/stock-notifications",

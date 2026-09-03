@@ -1,10 +1,10 @@
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
 import Review from "../models/Review.js";
+import StockNotification from "../models/StockNotification.js";
 
 export const getNotifications = async (req, res) => {
   try {
-
     const notifications = [];
 
     // Latest Orders
@@ -19,6 +19,23 @@ export const getNotifications = async (req, res) => {
         message: `${order.customerName} placed an order`,
         date: order.createdAt,
         link: `/admin/orders/${order._id}`,
+      });
+    });
+
+    // Pending Customer Stock Notification Requests
+    const stockRequests = await StockNotification.find({ notified: false })
+      .populate("product", "name")
+      .sort({ createdAt: -1 })
+      .limit(5);
+
+    stockRequests.forEach((sub) => {
+      const productName = sub.product?.name || "a product";
+      notifications.push({
+        type: "stock_request",
+        title: "New Stock Notification Request",
+        message: `${sub.email} requested restock alert for ${productName}`,
+        date: sub.createdAt,
+        link: "/admin/stock-notifications",
       });
     });
 
@@ -53,23 +70,18 @@ export const getNotifications = async (req, res) => {
     });
 
     notifications.sort(
-      (a, b) =>
-        new Date(b.date) - new Date(a.date)
+      (a, b) => new Date(b.date) - new Date(a.date)
     );
 
     res.json({
       success: true,
       notifications,
     });
-
   } catch (error) {
-
-    console.error(error);
-
+    console.error("Get Notifications Error:", error);
     res.status(500).json({
       success: false,
       message: error.message,
     });
-
   }
 };

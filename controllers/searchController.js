@@ -20,7 +20,7 @@ export const globalSearch = async (req, res) => {
       $or: [
         { name: regex },
         { category: regex },
-        { collection: regex },
+        { collections: regex },
       ],
     }).limit(5);
 

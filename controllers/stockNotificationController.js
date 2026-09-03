@@ -1,5 +1,6 @@
 import StockNotification from "../models/StockNotification.js";
 import Product from "../models/Product.js";
+import { sendRestockEmail, sendAdminStockNotificationEmail } from "../utils/sendEmail.js";
 
 // ======================================
 // Subscribe For Back-In-Stock Notification
@@ -122,6 +123,14 @@ export const subscribeStockNotification = async (
         user: req.user?._id || null,
         notified: false,
       });
+
+    // Notify Admin via Email asynchronously
+    sendAdminStockNotificationEmail({
+      customerEmail: normalizedEmail,
+      product,
+    }).catch((adminErr) => {
+      console.error("Admin Stock Notification Email Error:", adminErr);
+    });
 
     return res.status(201).json({
       success: true,
@@ -283,5 +292,48 @@ export const deleteStockNotification = async (
         error.message ||
         "Unable to decline stock notification request.",
     });
+  }
+};
+
+// ======================================
+// Helper: Process Pending Restock Notifications
+// ======================================
+export const processProductRestockNotifications = async (productId, productData) => {
+  try {
+    if (!productId) return;
+
+    const pendingSubscribers = await StockNotification.find({
+      product: productId,
+      notified: false,
+    });
+
+    if (!pendingSubscribers || pendingSubscribers.length === 0) {
+      console.log(`ℹ️ No pending stock notification subscribers for product: ${productId}`);
+      return;
+    }
+
+    console.log(`🔔 Found ${pendingSubscribers.length} subscribers waiting for restock of: ${productData?.name || productId}`);
+
+    for (const sub of pendingSubscribers) {
+      try {
+        const sent = await sendRestockEmail({
+          email: sub.email,
+          product: productData,
+        });
+
+        if (sent) {
+          sub.notified = true;
+          sub.notifiedAt = new Date();
+          await sub.save();
+          console.log(`✅ Marked notification as sent for: ${sub.email}`);
+        } else {
+          console.error(`⚠️ Email dispatch failed for ${sub.email}, leaving notified: false`);
+        }
+      } catch (subErr) {
+        console.error(`❌ Error processing restock notification for ${sub.email}:`, subErr);
+      }
+    }
+  } catch (error) {
+    console.error("Process Stock Notifications Error:", error);
   }
 };

@@ -43,9 +43,10 @@ const upiSettingsSchema = new mongoose.Schema(
     // Enable / Disable UPI
     // ======================================
 
+    // Keep UPI disabled until the admin configures the account.
     enabled: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   {

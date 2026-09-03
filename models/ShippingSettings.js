@@ -76,6 +76,12 @@ const shippingSettingsSchema = new mongoose.Schema(
         "Orders are delivered within 3-7 business days.",
     },
 
+    cancellationWindowHours: {
+      type: Number,
+      default: 24,
+      min: 0,
+    },
+
     // ===================================
     // PINCODE DELIVERY RULES
     // ===================================

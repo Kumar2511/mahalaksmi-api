@@ -5,6 +5,7 @@ import {
   updatePaymentSettings,
   getPayments,
   getPayment,
+  handlePaymentWebhook,
 } from "../controllers/paymentController.js";
 
 import {
@@ -13,6 +14,14 @@ import {
 } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
+
+// ===================================
+// PUBLIC WEBHOOK
+// ===================================
+router.post(
+  "/webhook",
+  handlePaymentWebhook
+);
 
 // ===================================
 // PAYMENT SETTINGS

@@ -1,109 +1,13 @@
 import mongoose from "mongoose";
 import Product from "../models/Product.js";
-import defaultProducts from "../data/defaultProducts.js";
+import { processProductRestockNotifications } from "./stockNotificationController.js";
 
 // ==============================
 // Create Product
 // ==============================
 // Import Default Products
 // ==============================
-export const importDefaultProducts = async (req, res) => {
-  try {
-    let imported = 0;
-    let skipped = 0;
-
-    for (const item of defaultProducts) {
-      // Skip if product already exists
-      const exists = await Product.findOne({
-        name: item.name,
-      });
-
-      if (exists) {
-        skipped++;
-        continue;
-      }
-
-      // Convert old structure → new schema
-      const product = {
-        name: item.name,
-
-        description:
-          item.description || "Premium Artificial Jewellery",
-
-        category: item.category,
-
-        collection: item.collection || "General",
-
-        price: item.price,
-
-        discountPrice:
-          item.discountPrice ??
-          item.originalPrice ??
-          item.price,
-
-        images: item.images
-          ? item.images
-          : item.image
-          ? [item.image]
-          : [],
-
-        stock: item.stock || 0,
-
-        featured: item.featured || false,
-        bestSeller: item.bestSeller || false,
-        newArrival: item.newArrival || false,
-        trending: item.trending || false,
-
-        instagramLink: item.instagramLink || "",
-
-// ======================================
-// Product Specifications
-// ======================================
-specifications: {
-  material: item.specifications?.material || "",
-  jewelleryType: item.specifications?.jewelleryType || "",
-  metalPlating: item.specifications?.metalPlating || "",
-  stone: item.specifications?.stone || "",
-  weight: item.specifications?.weight || "",
-  occasion: item.specifications?.occasion || "",
-  countryOfOrigin:
-    item.specifications?.countryOfOrigin || "India",
-},
-
-reviews: [],
-
-        numReviews:
-          item.numReviews ??
-          item.reviews ??
-          0,
-
-        averageRating:
-          item.averageRating ??
-          item.rating ??
-          0,
-      };
-
-      await Product.create(product);
-
-      imported++;
-    }
-
-    res.status(200).json({
-      success: true,
-      imported,
-      skipped,
-      total: defaultProducts.length,
-      message: `${imported} products imported successfully.`,
-    });
-  } catch (error) {
-    console.error("Import Error:", error);
-
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};// ==============================
+// ==============================
 // ===========================
 // Featured Products
 // ===========================
@@ -222,7 +126,7 @@ export const createProduct = async (req, res) => {
 // ==============================
 export const getProducts = async (req, res) => {
   try {
-    const { search, category, sort } = req.query;
+    const { search, category, collection, sort } = req.query;
 
     const filter = {};
 
@@ -235,8 +139,15 @@ export const getProducts = async (req, res) => {
     }
 
     // Category
-    if (category && category !== "All") {
-      filter.category = category;
+    if (category && category !== "All" && category !== "All Products") {
+      const escCategory = category.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+      filter.category = { $regex: new RegExp(`^${escCategory}$`, "i") };
+    }
+
+    // Collection
+    if (collection && collection !== "All") {
+      const escCollection = collection.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+      filter.collections = { $in: [new RegExp(`^${escCollection}$`, "i")] };
     }
 
     let query = Product.find(filter);
@@ -314,6 +225,7 @@ export const getProduct = async (req, res) => {
 };
 
 // ==============================
+// ==============================
 // Update Product
 // ==============================
 export const updateProduct = async (req, res) => {
@@ -327,6 +239,18 @@ export const updateProduct = async (req, res) => {
       });
     }
 
+    // Fetch existing product to inspect previous stock level
+    const existingProduct = await Product.findById(id);
+
+    if (!existingProduct) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    const oldStock = Number(existingProduct.stock || 0);
+
     const product = await Product.findByIdAndUpdate(
       id,
       req.body,
@@ -336,10 +260,12 @@ export const updateProduct = async (req, res) => {
       }
     );
 
-    if (!product) {
-      return res.status(404).json({
-        success: false,
-        message: "Product not found",
+    const newStock = Number(product.stock || 0);
+
+    // Detect actual restock transition: oldStock <= 0 -> newStock > 0
+    if (oldStock <= 0 && newStock > 0) {
+      processProductRestockNotifications(product._id, product).catch((err) => {
+        console.error("Restock Notification Dispatch Error:", err);
       });
     }
 
@@ -624,8 +550,7 @@ export const importAiPreviewProducts = async (req, res) => {
         result.category ||
         "Jewellery",
 
-      collection:
-        "AI Imported",
+      collections: [],
 
       // Admin-controlled values
       price: 0,

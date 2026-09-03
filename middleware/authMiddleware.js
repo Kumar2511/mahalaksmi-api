@@ -268,3 +268,18 @@ export const admin = (
       "Admin access only",
   });
 };
+
+
+// ======================================================
+// Admin Protected Route
+// ======================================================
+
+export const protectAdmin = async (
+  req,
+  res,
+  next
+) => {
+  await protect(req, res, () => {
+    return admin(req, res, next);
+  });
+};

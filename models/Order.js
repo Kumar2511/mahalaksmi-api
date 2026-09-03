@@ -153,6 +153,30 @@ const orderSchema = new mongoose.Schema(
     },
 
     // ===========================
+    // 5-Minute UPI Payment Session
+    // ===========================
+    paymentSessionStartedAt: {
+      type: Date,
+      default: null,
+    },
+
+    paymentSessionExpiresAt: {
+      type: Date,
+      default: null,
+    },
+
+    paymentSessionStatus: {
+      type: String,
+      enum: [
+        "Not Started",
+        "Active",
+        "Completed",
+        "Expired",
+      ],
+      default: "Not Started",
+    },
+
+    // ===========================
     // Razorpay
     // ===========================
     razorpayOrderId: {

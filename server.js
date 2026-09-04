@@ -115,6 +115,7 @@ app.use(
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
+  "https://the-girl-ho-she.vercel.app",
 ];
 
 app.use(
@@ -138,7 +139,6 @@ app.use(
     credentials: true,
   })
 );
-
 // ==========================================
 // BODY / COOKIE MIDDLEWARE
 // ==========================================

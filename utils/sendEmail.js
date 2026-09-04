@@ -1,7 +1,8 @@
 import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 // ==========================================
-// Create Gmail Transporter
+// Create Gmail Transporter (Local Dev)
 // ==========================================
 //
 // Transporter is created only when required.
@@ -29,6 +30,65 @@ const createTransporter = () => {
       user,
       pass,
     },
+  });
+};
+
+// ==========================================
+// Provider-Aware Email Dispatcher
+// ==========================================
+
+const deliverMail = async ({ from, to, subject, html }) => {
+  const resendApiKey = process.env.RESEND_API_KEY;
+  const isProduction = process.env.NODE_ENV === "production";
+
+  if (resendApiKey) {
+    // Production Resend API Delivery over HTTPS
+    const resend = new Resend(resendApiKey);
+    const resendFrom =
+      process.env.RESEND_FROM_EMAIL ||
+      "Mahalaksmi Jewellery <onboarding@resend.dev>";
+
+    const recipient = Array.isArray(to) ? to : [to];
+
+    const { data, error } = await resend.emails.send({
+      from: resendFrom,
+      to: recipient,
+      subject,
+      html,
+    });
+
+    if (error) {
+      console.error(
+        "❌ Resend API Error:",
+        error.message || error
+      );
+      throw new Error(
+        `Resend API failed: ${error.message || "Unknown error"}`
+      );
+    }
+
+    return data;
+  }
+
+  // Production check: Fail fast if RESEND_API_KEY is missing in production
+  if (isProduction) {
+    const errorMsg =
+      "RESEND_API_KEY is required for production email delivery.";
+    console.error(`❌ Email Configuration Error: ${errorMsg}`);
+    throw new Error(errorMsg);
+  }
+
+  // Local Development Gmail SMTP Delivery
+  const transporter = createTransporter();
+  const smtpFrom =
+    from ||
+    `"Mahalaksmi Jewellery" <${process.env.EMAIL_USER}>`;
+
+  return await transporter.sendMail({
+    from: smtpFrom,
+    to,
+    subject,
+    html,
   });
 };
 
@@ -107,13 +167,27 @@ const formatDateTime = (date) => {
 export const verifyEmailTransporter =
   async () => {
     try {
+      if (process.env.RESEND_API_KEY) {
+        console.log(
+          "✅ Resend API email delivery configured (RESEND_API_KEY set)"
+        );
+        return true;
+      }
+
+      if (process.env.NODE_ENV === "production") {
+        console.error(
+          "❌ Email Error: RESEND_API_KEY is required for production email delivery."
+        );
+        return false;
+      }
+
       const transporter =
         createTransporter();
 
       await transporter.verify();
 
       console.log(
-        "✅ Email transporter is ready"
+        "✅ Email transporter is ready (Gmail SMTP)"
       );
 
       return true;
@@ -143,9 +217,6 @@ export const sendOtpEmail = async ({
       );
     }
 
-    const transporter =
-      createTransporter();
-
     const purposeText =
       purpose === "admin-email-change"
         ? "confirm your new administrator email address"
@@ -160,10 +231,7 @@ export const sendOtpEmail = async ({
           ? "Password Reset OTP - Mahalaksmi Jewellery"
           : "Verify Your Email - Mahalaksmi Jewellery";
 
-    await transporter.sendMail({
-      from:
-        `"Mahalaksmi Jewellery" <${process.env.EMAIL_USER}>`,
-
+    await deliverMail({
       to: email,
 
       subject,
@@ -443,9 +511,6 @@ export const sendOrderStatusEmail = async ({
     ) {
       return true;
     }
-
-    const transporter =
-      createTransporter();
 
     const status =
       order.orderStatus || "Pending";
@@ -1211,10 +1276,7 @@ export const sendOrderStatusEmail = async ({
     // Send Email
     // ==========================================
 
-    await transporter.sendMail({
-      from:
-        `"Mahalaksmi Jewellery" <${process.env.EMAIL_USER}>`,
-
+    await deliverMail({
       to: recipientEmail,
 
       subject:
@@ -1917,7 +1979,6 @@ export const sendRestockEmail = async ({ email, product }) => {
       throw new Error("Email and product data are required.");
     }
 
-    const transporter = createTransporter();
     const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
     const productUrl = `${frontendUrl.replace(/\/$/, "")}/shop/${product._id}`;
     const productImage = product.images?.[0] || product.image || "";
@@ -1929,8 +1990,7 @@ export const sendRestockEmail = async ({ email, product }) => {
     );
     const productCategory = escapeHtml(product.category || "Antique Jewellery");
 
-    await transporter.sendMail({
-      from: `"Mahalaksmi Jewellery" <${process.env.EMAIL_USER}>`,
+    await deliverMail({
       to: email,
       subject: `${productName} is back in stock! - Mahalaksmi Jewellery`,
       html: `
@@ -2035,12 +2095,11 @@ export const sendAdminStockNotificationEmail = async ({ customerEmail, product }
       return false;
     }
 
-    const transporter = createTransporter();
     const productName = escapeHtml(product.name || "Jewellery Item");
     const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
     const adminStockUrl = `${frontendUrl.replace(/\/$/, "")}/admin/stock-notifications`;
 
-    await transporter.sendMail({
+    await deliverMail({
       from: `"Mahalaksmi System" <${process.env.EMAIL_USER}>`,
       to: adminEmail,
       subject: `[Admin Alert] Restock Request for ${productName}`,

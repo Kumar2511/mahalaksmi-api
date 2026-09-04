@@ -60,29 +60,38 @@ console.log(
     : "❌ MISSING"
 );
 
+console.log(
+  "RESEND_API_KEY:",
+  process.env.RESEND_API_KEY
+    ? "✅ SET (Production Resend API active)"
+    : "❌ NOT SET (Using local Gmail SMTP)"
+);
+
 // ==========================================
 // VERIFY EMAIL TRANSPORTER
 // ==========================================
 
 console.log(
-  "📧 Checking Gmail email transporter..."
+  "📧 Verifying email service..."
 );
 
 verifyEmailTransporter()
   .then((ready) => {
     if (ready) {
       console.log(
-        "📧 Gmail email authentication is ready"
+        `📧 Email service is ready (${
+          process.env.RESEND_API_KEY ? "Resend API" : "Gmail SMTP"
+        })`
       );
     } else {
       console.error(
-        "❌ Gmail email authentication failed"
+        "❌ Email service verification failed"
       );
     }
   })
   .catch((error) => {
     console.error(
-      "❌ Email transporter startup error:",
+      "❌ Email service startup error:",
       error
     );
   });

@@ -125,6 +125,9 @@ const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
   "https://the-girl-ho-she.vercel.app",
+  "https://localhost",
+  "capacitor://localhost",
+  "http://localhost",
 ];
 
 app.use(
@@ -208,6 +211,7 @@ app.use(
 );
 
 app.use("/api/invoices", invoiceRoutes);
+app.use("/api/invoice-settings", invoiceSettingsRoutes);
 app.use("/api/admin/invoice-settings", invoiceSettingsRoutes);
 // Stock Notifications
 app.use(

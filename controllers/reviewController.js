@@ -1,6 +1,7 @@
 import Review from "../models/Review.js";
 import Order from "../models/Order.js";
 import Product from "../models/Product.js";
+import { triggerAdminNotification } from "./notificationController.js";
 
 // Helper to recalculate and update product review stats in MongoDB
 export const updateProductStats = async (productId) => {
@@ -253,6 +254,15 @@ export const createReview = async (req, res) => {
 
   approved: false,
 });
+
+    triggerAdminNotification({
+      type: "review",
+      title: "New Customer Review",
+      message: `${customerName} submitted a ${rating}★ review`,
+      link: "/admin/reviews",
+      relatedEntityId: String(review._id),
+      relatedEntityType: "Review",
+    }).catch(() => {});
 
     // ==================================================
     // Response

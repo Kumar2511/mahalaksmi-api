@@ -3,6 +3,7 @@ import Product from "../models/Product.js";
 import Coupon from "../models/Coupon.js";
 import ShippingSettings from "../models/ShippingSettings.js";
 import { validateUPIPaymentScreenshot } from "../utils/upiScreenshotValidator.js";
+import { triggerAdminNotification } from "./notificationController.js";
 
 // ======================================
 // Allowed Payment Methods
@@ -743,6 +744,15 @@ export const createOrder =
             estimatedDelivery:
               data.estimatedDelivery,
           });
+
+        triggerAdminNotification({
+          type: "order",
+          title: "New Order Placed",
+          message: `${order.customerName || "Customer"} placed an order (₹${order.totalAmount})`,
+          link: `/admin/orders/${order._id}`,
+          relatedEntityId: String(order._id),
+          relatedEntityType: "Order",
+        }).catch(() => {});
 
         // ======================================
         // COUPON USAGE
@@ -1654,6 +1664,15 @@ export const submitUPIOrderAndProof =
               data.estimatedDelivery,
           });
 
+        triggerAdminNotification({
+          type: "order",
+          title: "New UPI Order & Payment Proof",
+          message: `${order.customerName || "Customer"} submitted order with UPI payment proof (₹${order.totalAmount})`,
+          link: `/admin/orders/${order._id}`,
+          relatedEntityId: String(order._id),
+          relatedEntityType: "Order",
+        }).catch(() => {});
+
         // ======================================
         // COUPON USAGE
         // ======================================
@@ -2269,6 +2288,15 @@ export const approveUPIPayment =
         "Confirmed";
 
       await order.save();
+
+      triggerAdminNotification({
+        type: "payment",
+        title: "UPI Payment Approved",
+        message: `Payment approved for Order #${order._id}`,
+        link: `/admin/orders/${order._id}`,
+        relatedEntityId: String(order._id),
+        relatedEntityType: "Order",
+      }).catch(() => {});
 
       return res.status(200).json({
         success: true,

@@ -4,6 +4,7 @@ import razorpay from "../config/razorpay.js";
 import Product from "../models/Product.js";
 import Coupon from "../models/Coupon.js";
 import ShippingSettings from "../models/ShippingSettings.js";
+import { triggerAdminNotification } from "./notificationController.js";
 
 // ======================================
 // Create Razorpay Order
@@ -384,6 +385,15 @@ export const verifyPayment = async (
     // ======================================
     // Success
     // ======================================
+
+    triggerAdminNotification({
+      type: "payment",
+      title: "Razorpay Payment Verified",
+      message: `Payment verified for Razorpay Order #${razorpay_order_id}`,
+      link: "/admin/payments",
+      relatedEntityId: String(razorpay_order_id),
+      relatedEntityType: "Payment",
+    }).catch(() => {});
 
     res.status(200).json({
       success: true,

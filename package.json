@@ -22,6 +22,7 @@
     "csv-parser": "^3.2.1",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
+    "firebase-admin": "^14.3.0",
     "jsonwebtoken": "^9.0.3",
     "jsqr": "^1.4.0",
     "mongodb": "^7.5.0",

@@ -1,6 +1,7 @@
 import StockNotification from "../models/StockNotification.js";
 import Product from "../models/Product.js";
 import { sendRestockEmail, sendAdminStockNotificationEmail } from "../utils/sendEmail.js";
+import { triggerAdminNotification } from "./notificationController.js";
 
 // ======================================
 // Subscribe For Back-In-Stock Notification
@@ -123,6 +124,16 @@ export const subscribeStockNotification = async (
         user: req.user?._id || null,
         notified: false,
       });
+
+    // Notify Admin via Push Notification asynchronously
+    triggerAdminNotification({
+      type: "stock_alert",
+      title: "Stock Alert Request",
+      message: `Stock notification requested for ${product.name || 'a product'} (${normalizedEmail})`,
+      link: "/admin/inventory",
+      relatedEntityId: product._id,
+      relatedEntityType: "Product",
+    }).catch((err) => console.error("Admin Stock Push Error:", err));
 
     // Notify Admin via Email asynchronously
     sendAdminStockNotificationEmail({

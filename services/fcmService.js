@@ -1,11 +1,12 @@
-import admin from "firebase-admin";
+import { initializeApp, cert, getApps } from "firebase-admin/app";
+import { getMessaging } from "firebase-admin/messaging";
 import AdminDeviceToken from "../models/AdminDeviceToken.js";
 
 let fcmInitialized = false;
 
 function initFirebase() {
   if (fcmInitialized) return true;
-  if (admin.apps?.length > 0) {
+  if (getApps().length > 0) {
     fcmInitialized = true;
     return true;
   }
@@ -20,10 +21,10 @@ function initFirebase() {
 
     if (rawJson) {
       const serviceAccount = JSON.parse(rawJson);
-      credential = admin.credential.cert(serviceAccount);
+      credential = cert(serviceAccount);
     } else if (projectId && clientEmail && privateKeyRaw) {
       const privateKey = privateKeyRaw.replace(/\\n/g, "\n");
-      credential = admin.credential.cert({
+      credential = cert({
         projectId,
         clientEmail,
         privateKey,
@@ -31,7 +32,7 @@ function initFirebase() {
     }
 
     if (credential) {
-      admin.initializeApp({ credential });
+      initializeApp({ credential });
       fcmInitialized = true;
       console.log("✅ Firebase Admin SDK initialized successfully");
       return true;
@@ -88,7 +89,7 @@ export async function sendAdminPushNotification({ title, message, link, data = {
       },
     };
 
-    const response = await admin.messaging().sendEachForMulticast(payload);
+    const response = await getMessaging().sendEachForMulticast(payload);
 
     // Prune invalid or expired tokens safely
     const invalidTokens = [];

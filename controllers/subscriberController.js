@@ -1,4 +1,5 @@
 import Subscriber from "../models/Subscriber.js";
+import { triggerAdminNotification } from "./notificationController.js";
 
 // ===============================
 // Subscribe Email
@@ -47,6 +48,23 @@ export const subscribeEmail = async (req, res) => {
       await Subscriber.create({
         email: normalizedEmail,
       });
+
+    try {
+      await triggerAdminNotification({
+        type: "subscriber",
+        title: "New Newsletter Subscriber",
+        message:
+          "A new customer subscribed to The Girl House newsletter.",
+        link: "/admin/subscribers",
+        relatedEntityId: subscriber._id.toString(),
+        relatedEntityType: "Subscriber",
+      });
+    } catch (notifErr) {
+      console.error(
+        "Failed to trigger subscriber admin notification:",
+        notifErr
+      );
+    }
 
     return res.status(201).json({
       success: true,

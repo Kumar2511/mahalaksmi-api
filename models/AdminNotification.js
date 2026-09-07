@@ -5,7 +5,7 @@ const adminNotificationSchema = new mongoose.Schema(
     type: {
       type: String,
       required: true,
-      enum: ["order", "payment", "review", "stock_request", "stock"],
+      enum: ["order", "payment", "review", "stock_request", "stock", "subscriber"],
     },
     title: {
       type: String,

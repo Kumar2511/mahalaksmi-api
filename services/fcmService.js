@@ -5,7 +5,7 @@ let fcmInitialized = false;
 
 function initFirebase() {
   if (fcmInitialized) return true;
-  if (admin.apps.length > 0) {
+  if (admin.apps?.length > 0) {
     fcmInitialized = true;
     return true;
   }

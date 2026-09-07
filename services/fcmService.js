@@ -84,18 +84,25 @@ export async function sendAdminPushNotification({ title, message, link, data = {
         notification: {
           sound: "default",
           channelId: "admin_notifications",
-          clickAction: "FLUTTER_NOTIFICATION_CLICK",
         },
       },
     };
 
     const response = await getMessaging().sendEachForMulticast(payload);
 
+    console.log(
+      `[FCM] Multicast result: success=${response.successCount} failure=${response.failureCount}`
+    );
+
     // Prune invalid or expired tokens safely
     const invalidTokens = [];
     response.responses.forEach((resp, idx) => {
       if (!resp.success) {
-        const errorCode = resp.error?.code;
+        const errorCode = resp.error?.code || "unknown_code";
+        const errorMsg = resp.error?.message || "unknown_error";
+        console.log(
+          `[FCM] Delivery failure index=${idx} code=${errorCode} message=${errorMsg}`
+        );
         if (
           errorCode === "messaging/registration-token-not-registered" ||
           errorCode === "messaging/invalid-registration-token"

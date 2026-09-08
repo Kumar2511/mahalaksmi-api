@@ -1,6 +1,62 @@
 import fs from "fs";
 import path from "path";
+import axios from "axios";
 import Product from "../models/Product.js";
+import {
+  computeImageFingerprint,
+  compareFingerprints,
+  detectJewelleryCategory,
+} from "../utils/imageHash.js";
+
+// Cache for catalogue image fingerprints to avoid re-hashing static images repeatedly
+const fingerprintCache = new Map();
+
+/**
+ * Resolves local file paths or fetches Cloudinary buffers to compute fingerprints.
+ * Handles both backend uploads (/uploads/) and frontend public (/products/) paths.
+ */
+async function getCatalogueFingerprints(imgUrl) {
+  if (!imgUrl) return [];
+
+  if (fingerprintCache.has(imgUrl)) {
+    return fingerprintCache.get(imgUrl);
+  }
+
+  try {
+    let imageInput = null;
+
+    if (imgUrl.startsWith("http://") || imgUrl.startsWith("https://")) {
+      // Cloudinary / Remote URL
+      const response = await axios.get(imgUrl, {
+        responseType: "arraybuffer",
+        timeout: 6000,
+      });
+      imageInput = Buffer.from(response.data);
+    } else {
+      // Relative path handling
+      const cleanPath = imgUrl.startsWith("/") ? imgUrl.slice(1) : imgUrl;
+      const backendUploadsPath = path.resolve(process.cwd(), cleanPath);
+      const frontendPublicPath = path.resolve(process.cwd(), "../mahalaksmi/public", cleanPath);
+
+      if (fs.existsSync(backendUploadsPath)) {
+        imageInput = backendUploadsPath;
+      } else if (fs.existsSync(frontendPublicPath)) {
+        imageInput = frontendPublicPath;
+      }
+    }
+
+    if (imageInput) {
+      const fingerprints = await computeImageFingerprint(imageInput);
+      fingerprintCache.set(imgUrl, fingerprints);
+      return fingerprints;
+    }
+  } catch (err) {
+    console.error(`Error fingerprinting catalogue image (${imgUrl}):`, err.message);
+  }
+
+  fingerprintCache.set(imgUrl, []);
+  return [];
+}
 
 // ==========================================
 // SEARCH PRODUCT BY INSTAGRAM URL
@@ -51,12 +107,14 @@ export const searchProductByUrl = async (req, res) => {
     if (!product) {
       return res.status(404).json({
         success: false,
-        message: "No matching product found in our catalogue for this Instagram link.",
+        matchType: "none",
+        message: "This product is not available in our store.",
       });
     }
 
     return res.status(200).json({
       success: true,
+      matchType: "exact",
       message: "Product found!",
       product: {
         _id: product._id,
@@ -78,7 +136,7 @@ export const searchProductByUrl = async (req, res) => {
 };
 
 // ==========================================
-// FIND PRODUCT BY SCREENSHOT (TEMPORARY FILE ONLY)
+// FIND PRODUCT BY SCREENSHOT (HIGH-PRECISION VISUAL SEARCH)
 // ==========================================
 export const findProductByImage = async (req, res) => {
   let tempFilePath = null;
@@ -94,81 +152,180 @@ export const findProductByImage = async (req, res) => {
     tempFilePath = req.file.path;
     const originalName = (req.file.originalname || "").toLowerCase();
 
-    // Fetch catalogue products to perform visual matching
+    // 1. Compute 256-bit perceptual fingerprints for uploaded screenshot
+    const uploadedFingerprints = await computeImageFingerprint(tempFilePath);
+
+    // Fetch catalogue products from MongoDB
     const products = await Product.find().lean();
 
-    if (!products || products.length === 0) {
+    if (!products || products.length === 0 || uploadedFingerprints.length === 0) {
       return res.status(200).json({
         success: true,
-        message: "Catalogue visual search complete",
+        matchType: "none",
+        message: "⚠️ We couldn't identify a jewellery product. Please upload a jewellery image or choose a category below.",
         exactMatch: null,
         matches: [],
       });
     }
 
-    // Match against catalogue items by keyword/category/filename relevance
-    let matchResults = [];
+    // 2. Perform 256-bit Hash & Color comparison against catalogue product images
+    const scoredProducts = [];
 
     for (const prod of products) {
-      let score = 0;
-      const prodImages = (prod.images || []).map((img) => img.toLowerCase());
-      const prodName = (prod.name || "").toLowerCase();
-      const prodCategory = (prod.category || "").toLowerCase();
+      const prodImages = [
+        ...(prod.images || []),
+        prod.image,
+      ].filter(Boolean);
 
-      // Check if original filename or path matches catalogue media
-      if (prodImages.some((img) => originalName && img.includes(originalName))) {
-        score += 0.95;
+      let minDist = 256;
+      let minColor = 255;
+      let exactFilenameMatched = false;
+
+      for (const imgUrl of prodImages) {
+        // Filename identity check (Priority 1a)
+        const imgFilename = imgUrl.split("/").pop()?.toLowerCase() || "";
+        if (imgFilename && originalName && originalName.includes(imgFilename)) {
+          minDist = 0;
+          minColor = 0;
+          exactFilenameMatched = true;
+          break;
+        }
+
+        // 256-Bit Perceptual Fingerprint Check (Priority 1b)
+        const catalogueFps = await getCatalogueFingerprints(imgUrl);
+        if (catalogueFps.length > 0) {
+          const { minDistance, minColorDiff } = compareFingerprints(uploadedFingerprints, catalogueFps);
+          if (minDistance < minDist) {
+            minDist = minDistance;
+            minColor = minColorDiff;
+          }
+        }
       }
 
-      // Check category keywords in uploaded file name
-      if (originalName.includes("necklace") && prodCategory.includes("necklace")) {
-        score += 0.45;
-      } else if (originalName.includes("earring") && prodCategory.includes("earring")) {
-        score += 0.45;
-      } else if (originalName.includes("ring") && prodCategory.includes("ring")) {
-        score += 0.45;
-      } else if (originalName.includes("haram") && (prodName.includes("haram") || prodCategory.includes("haram"))) {
-        score += 0.55;
-      } else if (originalName.includes("bangle") && (prodName.includes("bangle") || prodCategory.includes("bangle"))) {
-        score += 0.45;
-      }
-
-      if (score > 0) {
-        matchResults.push({ product: prod, confidence: score });
-      }
-    }
-
-    // If no direct keyword match, provide top representative catalogue items as candidates
-    if (matchResults.length === 0) {
-      matchResults = products.slice(0, 6).map((prod) => ({
+      scoredProducts.push({
         product: prod,
-        confidence: 0.75,
-      }));
+        distance: minDist,
+        colorDiff: minColor,
+        exactFilenameMatched,
+        confidence: Math.max(0, (256 - minDist) / 256),
+      });
     }
 
-    // Sort by highest confidence score
-    matchResults.sort((a, b) => b.confidence - a.confidence);
+    // Sort products by lowest 256-bit distance, then by lowest color difference
+    scoredProducts.sort((a, b) => {
+      if (a.distance !== b.distance) return a.distance - b.distance;
+      return a.colorDiff - b.colorDiff;
+    });
 
-    const formattedMatches = matchResults.slice(0, 6).map((m) => ({
-      _id: m.product._id,
-      name: m.product.name,
-      price: m.product.price,
-      discountPrice: m.product.discountPrice,
-      category: m.product.category,
-      image: m.product.images?.[0] || m.product.image || "",
-      confidence: m.confidence,
-    }));
+    const topMatch = scoredProducts[0];
+    const secondMatch = scoredProducts[1] || { distance: 256, colorDiff: 255 };
 
-    const exactMatch = formattedMatches[0] && formattedMatches[0].confidence >= 0.85
-      ? formattedMatches[0]
-      : null;
+    // =========================================================
+    // LEVEL 1: EXACT PRODUCT MATCH
+    // Requirement: Must be 100% exact catalogue identity.
+    // 1. Filename match OR
+    // 2. Full/crop 256-bit distance <= 20 & color diff <= 30 OR
+    // 3. Multi-region crop distance <= 28 & color diff <= 35 with clear score dominance over 2nd best candidate
+    // =========================================================
+    const isDominantMatch =
+      topMatch &&
+      topMatch.distance <= 28 &&
+      topMatch.colorDiff <= 35 &&
+      (secondMatch.distance - topMatch.distance >= 15 || secondMatch.distance > 40);
 
+    const isExactMatch =
+      topMatch &&
+      (topMatch.exactFilenameMatched ||
+        (topMatch.distance <= 20 && topMatch.colorDiff <= 30) ||
+        isDominantMatch);
+
+    if (isExactMatch) {
+      const exactProduct = {
+        _id: topMatch.product._id,
+        name: topMatch.product.name,
+        price: topMatch.product.price,
+        discountPrice: topMatch.product.discountPrice,
+        category: topMatch.product.category,
+        image: topMatch.product.images?.[0] || topMatch.product.image || "",
+        confidence: topMatch.confidence,
+      };
+
+      return res.status(200).json({
+        success: true,
+        matchType: "exact",
+        message: "Product found!",
+        exactMatch: exactProduct,
+        matches: [exactProduct],
+        redirectUrl: `/shop/${exactProduct._id}`,
+      });
+    }
+
+    // =========================================================
+    // LEVEL 2: NO EXACT MATCH -> RELATIVE CATEGORY PRODUCTS (UP TO 6 COMPACT CARDS)
+    // =========================================================
+    let detectedCategory = null;
+
+    if (originalName.includes("necklace") || originalName.includes("haram") || originalName.includes("attigai")) {
+      detectedCategory = "Necklaces";
+    } else if (originalName.includes("earring") || originalName.includes("jhumka") || originalName.includes("stud")) {
+      detectedCategory = "Earrings";
+    } else if (originalName.includes("ring")) {
+      detectedCategory = "Rings";
+    } else if (originalName.includes("bangle") || originalName.includes("bracelet") || originalName.includes("kada")) {
+      detectedCategory = "Bracelets";
+    } else if (originalName.includes("chain")) {
+      detectedCategory = "Chains";
+    } else if (originalName.includes("pendant")) {
+      detectedCategory = "Pendants";
+    } else if (originalName.includes("set")) {
+      detectedCategory = "Jewelry Sets";
+    } else if (topMatch && topMatch.distance <= 75) {
+      // Visual category hint from catalogue item if distance indicates jewellery similarity
+      detectedCategory = topMatch.product.category || null;
+    }
+
+    if (!detectedCategory) {
+      detectedCategory = await detectJewelleryCategory(tempFilePath);
+    }
+
+    if (detectedCategory) {
+      const catProds = products.filter(
+        (p) => String(p.category || "").toLowerCase() === detectedCategory.toLowerCase()
+      );
+
+      if (catProds.length > 0) {
+        const compactSimilar = catProds.slice(0, 6).map((p) => ({
+          _id: p._id,
+          name: p.name,
+          price: p.price,
+          discountPrice: p.discountPrice,
+          category: p.category,
+          image: p.images?.[0] || p.image || "",
+          confidence: 0.7,
+        }));
+
+        return res.status(200).json({
+          success: true,
+          matchType: "similar",
+          message: "We couldn't find the exact product, but these may be related:",
+          categoryName: detectedCategory,
+          exactMatch: null,
+          matches: compactSimilar,
+        });
+      }
+    }
+
+    // =========================================================
+    // LEVEL 3: INVALID / UNRELATED IMAGE -> NO MATCH STATE
+    // =========================================================
     return res.status(200).json({
       success: true,
-      message: "Catalogue visual search complete",
-      exactMatch,
-      matches: formattedMatches,
+      matchType: "none",
+      message: "⚠️ We couldn't identify a jewellery product. Please upload a jewellery image or choose a category below.",
+      exactMatch: null,
+      matches: [],
     });
+
   } catch (error) {
     console.error("Visual Image Search Error:", error);
     return res.status(500).json({
@@ -177,7 +334,7 @@ export const findProductByImage = async (req, res) => {
     });
   } finally {
     // CRITICAL SECURITY & PRIVACY REQUIREMENT:
-    // Delete temporary screenshot immediately after analysis completes. Never upload to Cloudinary.
+    // Delete temporary screenshot immediately after analysis completes.
     if (tempFilePath && fs.existsSync(tempFilePath)) {
       try {
         fs.unlinkSync(tempFilePath);

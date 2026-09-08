@@ -310,11 +310,16 @@ export const applyCoupon = async (
   res
 ) => {
   try {
-    const { code, totalAmount } =
+    const { code, totalAmount, subtotal: subtotalBody } =
       req.body;
 
+    const rawSubtotal =
+      totalAmount !== undefined
+        ? totalAmount
+        : subtotalBody;
+
     const subtotal =
-      Number(totalAmount);
+      Number(rawSubtotal);
 
     // ==================================
     // Validation

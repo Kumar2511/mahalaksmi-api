@@ -944,7 +944,7 @@ const generateInvoicePDF = async (order) => {
         .fontSize(9)
         .fillColor("#211815")
         .text(
-          "Thank you for shopping with Mahalaksmi Jewellery.",
+          "Thank you for shopping with The Girl House Jewellery.",
           45,
           footerY
         );

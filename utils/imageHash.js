@@ -1,194 +1,450 @@
 import sharp from "sharp";
-import fs from "fs";
-import path from "path";
 
 /**
- * Compute 256-bit High-Precision Difference Hash (dHash 16x16) for an image.
- * Resizes to 17x16 grayscale, compares adjacent pixels across rows.
- * Provides 4x higher structural precision than 8x8 dHash to prevent false positives.
+ * Visual fingerprint utilities for Find Your Product.
+ *
+ * IMPORTANT:
+ * - The customer uploads the FULL screenshot.
+ * - We do NOT require the customer to crop the jewellery.
+ * - The screenshot is analysed as a whole AND through automatically
+ *   generated regions/tiles.
+ * - The customer never chooses or defines a crop.
+ *
+ * This allows a jewellery product inside an Instagram screenshot,
+ * browser screenshot, social-media screenshot, etc. to be matched
+ * against the actual catalogue product image.
  */
-export async function compute256Hash(input) {
-  try {
-    let pipeline = sharp(input);
-    const metadata = await pipeline.metadata();
 
-    if (!metadata.width || !metadata.height) {
-      return null;
+/**
+ * Convert an image into a perceptual dHash.
+ *
+ * 17 x 16 grayscale image produces:
+ * 16 x 16 = 256 comparison bits.
+ */
+async function compute256Hash(input) {
+  const { data } = await sharp(input)
+    .resize(17, 16, {
+      fit: "fill",
+    })
+    .grayscale()
+    .raw()
+    .toBuffer({
+      resolveWithObject: true,
+    });
+
+  let bits = "";
+
+  for (let y = 0; y < 16; y++) {
+    for (let x = 0; x < 16; x++) {
+      const current = data[y * 17 + x];
+      const next = data[y * 17 + x + 1];
+
+      bits += current > next ? "1" : "0";
     }
-
-    const { data } = await pipeline
-      .grayscale()
-      .resize(17, 16, { fit: "fill" })
-      .raw()
-      .toBuffer({ resolveWithObject: true });
-
-    let hashBits = "";
-    for (let row = 0; row < 16; row++) {
-      for (let col = 0; col < 16; col++) {
-        const leftPixel = data[row * 17 + col];
-        const rightPixel = data[row * 17 + col + 1];
-        hashBits += leftPixel < rightPixel ? "1" : "0";
-      }
-    }
-    return hashBits;
-  } catch (error) {
-    console.error("Error computing 256-bit hash:", error);
-    return null;
   }
+
+  return bits;
 }
 
 /**
- * Compute RGB Mean Color Stats for precise color identity verification.
+ * Calculate average RGB values.
+ *
+ * Used together with perceptual hashing so that two visually
+ * different products with similar outlines are less likely to
+ * be treated as exact matches.
  */
-export async function computeColorStats(input) {
-  try {
-    const stats = await sharp(input).stats();
-    if (stats.channels && stats.channels.length >= 3) {
-      return {
-        r: Math.round(stats.channels[0].mean),
-        g: Math.round(stats.channels[1].mean),
-        b: Math.round(stats.channels[2].mean),
-      };
-    }
-  } catch (err) {
-    console.error("Error computing color stats:", err);
-  }
-  return null;
+async function computeColorStats(input) {
+  const stats = await sharp(input).stats();
+
+  const channels = stats.channels || [];
+
+  const r = channels[0]?.mean || 0;
+  const g = channels[1]?.mean || 0;
+  const b = channels[2]?.mean || 0;
+
+  return {
+    r,
+    g,
+    b,
+  };
 }
 
 /**
- * Compute multi-crop hashes and color stats across 5 region extractions:
- * 1. Full image (100%)
- * 2. Center crop (60% focused center)
- * 3. Square center crop (1:1 aspect ratio)
- * 4. Top-Center crop (70% top focused)
- * 5. Middle-Center crop (70% middle focused)
- * This guarantees cropped screenshots derived from website images match the catalogue product!
+ * Compare two binary hashes using Hamming distance.
+ *
+ * Lower = more visually similar.
  */
-export async function computeImageFingerprint(input) {
-  const fingerprints = [];
-  try {
-    const pipeline = sharp(input);
-    const metadata = await pipeline.metadata();
+function hammingDistance(hashA, hashB) {
+  if (!hashA || !hashB) {
+    return Number.MAX_SAFE_INTEGER;
+  }
 
-    if (!metadata.width || !metadata.height) {
-      return fingerprints;
+  if (hashA.length !== hashB.length) {
+    return Number.MAX_SAFE_INTEGER;
+  }
+
+  let distance = 0;
+
+  for (let i = 0; i < hashA.length; i++) {
+    if (hashA[i] !== hashB[i]) {
+      distance++;
+    }
+  }
+
+  return distance;
+}
+
+/**
+ * RGB distance.
+ */
+function colorDistance(colorA, colorB) {
+  if (!colorA || !colorB) {
+    return Number.MAX_SAFE_INTEGER;
+  }
+
+  const dr = colorA.r - colorB.r;
+  const dg = colorA.g - colorB.g;
+  const db = colorA.b - colorB.b;
+
+  return Math.sqrt(
+    dr * dr +
+      dg * dg +
+      db * db
+  );
+}
+
+/**
+ * Generate a fingerprint for an image.
+ */
+async function createFingerprint(input) {
+  const [hash, color] = await Promise.all([
+    compute256Hash(input),
+    computeColorStats(input),
+  ]);
+
+  return {
+    hash,
+    color,
+  };
+}
+
+/**
+ * Create an automatically generated set of search regions.
+ *
+ * This is NOT a customer crop.
+ *
+ * The user uploads the complete screenshot and the server
+ * automatically creates several overlapping regions so the
+ * jewellery can be detected even when:
+ *
+ * - Instagram UI is present
+ * - browser chrome is present
+ * - text/captions surround the product
+ * - the product is not perfectly centred
+ * - the screenshot contains multiple visual areas
+ *
+ * We intentionally do not ask the customer to crop anything.
+ */
+async function createSearchRegions(input) {
+  const metadata = await sharp(input).metadata();
+
+  const width = metadata.width || 0;
+  const height = metadata.height || 0;
+
+  if (!width || !height) {
+    return [];
+  }
+
+  const regions = [];
+
+  /**
+   * Always include the complete screenshot.
+   */
+  regions.push({
+    name: "full",
+    left: 0,
+    top: 0,
+    width,
+    height,
+  });
+
+  /**
+   * Large central region.
+   *
+   * This is only one of several automatically generated regions.
+   * It does NOT replace full-image analysis.
+   */
+  const centerWidth = Math.round(width * 0.82);
+  const centerHeight = Math.round(height * 0.82);
+
+  regions.push({
+    name: "center",
+    left: Math.max(
+      0,
+      Math.round((width - centerWidth) / 2)
+    ),
+    top: Math.max(
+      0,
+      Math.round((height - centerHeight) / 2)
+    ),
+    width: centerWidth,
+    height: centerHeight,
+  });
+
+  /**
+   * Overlapping horizontal regions.
+   */
+  const horizontalWidth = Math.round(width * 0.68);
+
+  regions.push({
+    name: "left",
+    left: 0,
+    top: Math.round(height * 0.08),
+    width: horizontalWidth,
+    height: Math.round(height * 0.84),
+  });
+
+  regions.push({
+    name: "middle",
+    left: Math.round(width * 0.16),
+    top: Math.round(height * 0.08),
+    width: horizontalWidth,
+    height: Math.round(height * 0.84),
+  });
+
+  regions.push({
+    name: "right",
+    left: Math.max(
+      0,
+      width - horizontalWidth
+    ),
+    top: Math.round(height * 0.08),
+    width: horizontalWidth,
+    height: Math.round(height * 0.84),
+  });
+
+  /**
+   * Automatically inspect upper/middle/lower areas.
+   *
+   * This helps when the jewellery occupies only part of a
+   * complete Instagram screenshot.
+   */
+  const verticalHeight = Math.round(height * 0.68);
+
+  regions.push({
+    name: "top",
+    left: Math.round(width * 0.08),
+    top: 0,
+    width: Math.round(width * 0.84),
+    height: verticalHeight,
+  });
+
+  regions.push({
+    name: "middle-vertical",
+    left: Math.round(width * 0.08),
+    top: Math.round(height * 0.16),
+    width: Math.round(width * 0.84),
+    height: verticalHeight,
+  });
+
+  regions.push({
+    name: "bottom",
+    left: Math.round(width * 0.08),
+    top: Math.max(
+      0,
+      height - verticalHeight
+    ),
+    width: Math.round(width * 0.84),
+    height: verticalHeight,
+  });
+
+  /**
+   * Remove invalid/duplicate regions.
+   */
+  const unique = new Map();
+
+  for (const region of regions) {
+    const safeWidth = Math.min(
+      region.width,
+      width - region.left
+    );
+
+    const safeHeight = Math.min(
+      region.height,
+      height - region.top
+    );
+
+    if (
+      safeWidth <= 0 ||
+      safeHeight <= 0
+    ) {
+      continue;
     }
 
-    const { width, height } = metadata;
-
-    // 1. Full image fingerprint
-    const fullHash = await compute256Hash(input);
-    const fullColor = await computeColorStats(input);
-    if (fullHash) {
-      fingerprints.push({ hash: fullHash, color: fullColor, type: "full" });
-    }
-
-    // Function to add a sub-crop region
-    const addRegion = async (left, top, cropW, cropH, regionType) => {
-      try {
-        if (cropW > 30 && cropH > 30 && left >= 0 && top >= 0 && left + cropW <= width && top + cropH <= height) {
-          const croppedBuffer = await sharp(input)
-            .extract({ left, top, width: cropW, height: cropH })
-            .toBuffer();
-          const cropHash = await compute256Hash(croppedBuffer);
-          const cropColor = await computeColorStats(croppedBuffer);
-          if (cropHash) {
-            fingerprints.push({ hash: cropHash, color: cropColor, type: regionType });
-          }
-        }
-      } catch (e) {
-        // Skip unprocessable sub-crops
-      }
+    const normalized = {
+      ...region,
+      width: safeWidth,
+      height: safeHeight,
     };
 
-    // 2. Center crop (60% focused center)
-    const cW60 = Math.floor(width * 0.6);
-    const cH60 = Math.floor(height * 0.6);
-    await addRegion(Math.floor((width - cW60) / 2), Math.floor((height - cH60) / 2), cW60, cH60, "center60");
+    const key = [
+      normalized.left,
+      normalized.top,
+      normalized.width,
+      normalized.height,
+    ].join(":");
 
-    // 3. Square center crop (1:1 aspect ratio)
-    const sqSide = Math.floor(Math.min(width, height) * 0.8);
-    await addRegion(Math.floor((width - sqSide) / 2), Math.floor((height - sqSide) / 2), sqSide, sqSide, "square");
-
-    // 4. Top-Center crop (70% top focused)
-    const cW70 = Math.floor(width * 0.7);
-    const cH70 = Math.floor(height * 0.7);
-    await addRegion(Math.floor((width - cW70) / 2), Math.floor(height * 0.05), cW70, cH70, "top70");
-
-    // 5. Middle-Center crop (70% middle focused)
-    await addRegion(Math.floor((width - cW70) / 2), Math.floor(height * 0.15), cW70, cH70, "mid70");
-
-  } catch (err) {
-    console.error("Error computing image fingerprint:", err);
+    if (!unique.has(key)) {
+      unique.set(key, normalized);
+    }
   }
+
+  return Array.from(unique.values());
+}
+
+/**
+ * Create fingerprints for the complete screenshot plus
+ * automatically generated regions.
+ */
+async function createScreenshotFingerprints(input) {
+  const regions = await createSearchRegions(input);
+
+  const fingerprints = [];
+
+  for (const region of regions) {
+    try {
+      const regionBuffer = await sharp(input)
+        .extract({
+          left: region.left,
+          top: region.top,
+          width: region.width,
+          height: region.height,
+        })
+        .jpeg({
+          quality: 90,
+        })
+        .toBuffer();
+
+      const fingerprint = await createFingerprint(
+        regionBuffer
+      );
+
+      fingerprints.push({
+        region: region.name,
+        ...fingerprint,
+      });
+    } catch (error) {
+      console.warn(
+        `Unable to fingerprint screenshot region "${region.name}":`,
+        error.message
+      );
+    }
+  }
+
   return fingerprints;
 }
 
 /**
- * Calculate Hamming distance between two binary hash strings.
+ * Compare a screenshot fingerprint against a catalogue fingerprint.
  */
-export function hammingDistance256(hash1, hash2) {
-  if (!hash1 || !hash2 || hash1.length !== hash2.length) return 256;
-  let dist = 0;
-  for (let i = 0; i < hash1.length; i++) {
-    if (hash1[i] !== hash2[i]) dist++;
+function compareFingerprints(
+  searchFingerprint,
+  catalogueFingerprint
+) {
+  if (
+    !searchFingerprint ||
+    !catalogueFingerprint
+  ) {
+    return {
+      hashDistance: Number.MAX_SAFE_INTEGER,
+      colorDistance: Number.MAX_SAFE_INTEGER,
+      score: Number.MAX_SAFE_INTEGER,
+    };
   }
-  return dist;
+
+  const hashDistanceValue = hammingDistance(
+    searchFingerprint.hash,
+    catalogueFingerprint.hash
+  );
+
+  const colorDistanceValue = colorDistance(
+    searchFingerprint.color,
+    catalogueFingerprint.color
+  );
+
+  /**
+   * Hash is the primary signal.
+   * Colour is secondary.
+   *
+   * We intentionally keep colour influence low because:
+   * - screenshots can have filters
+   * - Instagram can alter image rendering
+   * - browser/display colours can differ
+   */
+  const normalizedColor =
+    Math.min(colorDistanceValue, 441.67) / 441.67;
+
+  const score =
+    hashDistanceValue +
+    normalizedColor * 12;
+
+  return {
+    hashDistance: hashDistanceValue,
+    colorDistance: colorDistanceValue,
+    score,
+  };
 }
 
 /**
- * Calculate minimum Hamming distance and color difference between candidate fingerprint lists.
+ * Compare multiple automatically generated screenshot regions
+ * against one catalogue image.
+ *
+ * The BEST region wins.
+ *
+ * Therefore the customer's full screenshot can still find the
+ * product even when the jewellery occupies only part of it.
  */
-export function compareFingerprints(fpList1, fpList2) {
-  let minDistance = 256;
-  let minColorDiff = 255;
-
-  for (const fp1 of fpList1) {
-    for (const fp2 of fpList2) {
-      // Prioritize corresponding crop region comparisons (e.g. full vs full, center vs center)
-      const isSameType = fp1.type === fp2.type;
-      const rawDist = hammingDistance256(fp1.hash, fp2.hash);
-      const effectiveDist = isSameType ? rawDist : rawDist + 4;
-
-      let colorDiff = 0;
-      if (fp1.color && fp2.color) {
-        colorDiff =
-          Math.abs(fp1.color.r - fp2.color.r) +
-          Math.abs(fp1.color.g - fp2.color.g) +
-          Math.abs(fp1.color.b - fp2.color.b);
-      }
-
-      if (effectiveDist < minDistance || (effectiveDist === minDistance && colorDiff < minColorDiff)) {
-        minDistance = rawDist;
-        minColorDiff = colorDiff;
-      }
-    }
-  }
-
-  return { minDistance, minColorDiff };
-}
-
-/**
- * Category detector based on aspect ratio & color structure.
- */
-export async function detectJewelleryCategory(input) {
-  try {
-    const pipeline = sharp(input);
-    const metadata = await pipeline.metadata();
-    if (!metadata.width || !metadata.height) return null;
-
-    const aspectRatio = metadata.width / metadata.height;
-
-    if (aspectRatio > 1.3) {
-      return "Necklaces";
-    } else if (aspectRatio < 0.75) {
-      return "Earrings";
-    } else {
-      return "Rings";
-    }
-  } catch (err) {
-    console.error("Error detecting category:", err);
+function compareScreenshotToCatalogue(
+  screenshotFingerprints,
+  catalogueFingerprint
+) {
+  if (
+    !Array.isArray(screenshotFingerprints) ||
+    screenshotFingerprints.length === 0
+  ) {
     return null;
   }
+
+  let best = null;
+
+  for (const screenshotFingerprint of screenshotFingerprints) {
+    const comparison = compareFingerprints(
+      screenshotFingerprint,
+      catalogueFingerprint
+    );
+
+    if (
+      !best ||
+      comparison.score < best.score
+    ) {
+      best = {
+        region: screenshotFingerprint.region,
+        ...comparison,
+      };
+    }
+  }
+
+  return best;
 }
+
+export {
+  compute256Hash,
+  computeColorStats,
+  hammingDistance,
+  colorDistance,
+  createFingerprint,
+  createSearchRegions,
+  createScreenshotFingerprints,
+  compareFingerprints,
+  compareScreenshotToCatalogue,
+};

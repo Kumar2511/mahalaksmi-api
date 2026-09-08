@@ -259,6 +259,25 @@ async function createSearchRegions(input) {
   });
 
   /**
+   * Typical Instagram screenshot post area (skips top header & bottom action bars).
+   */
+  regions.push({
+    name: "instagram-post",
+    left: Math.round(width * 0.05),
+    top: Math.round(height * 0.12),
+    width: Math.round(width * 0.9),
+    height: Math.round(height * 0.65),
+  });
+
+  regions.push({
+    name: "instagram-feed-inner",
+    left: Math.round(width * 0.08),
+    top: Math.round(height * 0.15),
+    width: Math.round(width * 0.84),
+    height: Math.round(height * 0.62),
+  });
+
+  /**
    * Remove invalid/duplicate regions.
    */
   const unique = new Map();

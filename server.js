@@ -23,6 +23,7 @@ import stockNotificationRoutes from "./routes/stockNotificationRoutes.js";
 import upiRoutes from "./routes/upiRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import imageSearchRoutes from "./routes/imageSearchRoutes.js";
+import clipVisualSearchRoutes from "./routes/clipVisualSearchRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import customerRoutes from "./routes/customerRoutes.js";
 import searchRoutes from "./routes/searchRoutes.js";
@@ -226,6 +227,10 @@ app.use(
 );
 
 // Image Search
+app.use(
+  "/api/image-search",
+  clipVisualSearchRoutes
+);
 app.use(
   "/api/image-search",
   imageSearchRoutes
